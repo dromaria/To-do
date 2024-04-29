@@ -1,18 +1,17 @@
-FROM php:8.3.6-fpm
+FROM php:8.3.6-fpm-alpine3.19
 
-RUN apt-get update && apt-get install -y \
-      apt-utils \
+RUN apk update && apk add \
       libpq-dev \
       libpng-dev \
       libzip-dev \
       zip unzip \
-      git && \
-      docker-php-ext-install pdo_pgsql && \
+      git
+RUN docker-php-ext-install pdo_pgsql && \
       docker-php-ext-install bcmath && \
       docker-php-ext-install gd && \
-      docker-php-ext-install zip && \
-      apt-get clean && \
-      rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+      docker-php-ext-install zip
+RUN apk cache clean && \
+      rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 

@@ -1,0 +1,40 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: _docker/app/Dockerfile
+        volumes:
+            - ./:/var/www
+        container_name: todo_app
+        depends_on:
+            - db
+        environment:
+            APP_KEY: base64:HYL7ToFdCupKbIccJB/ANQUzWkpm5bZApPc0a+awcJY=
+            DB_USERNAME: root
+            DB_PASSWORD: root
+            DB_PORT: 5432
+            DB_HOST: db
+
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./:/var/www/
+            - ./_docker/nginx/conf.d/:/etc/nginx/conf.d/
+        ports:
+            - "8876:80"
+        container_name: todo_nginx
+        depends_on:
+            - app
+
+    db:
+        image: postgres:latest
+        restart: always
+        ports:
+            - 8889:5432
+        environment:
+            POSTGRES_DATABASE: 'todo'
+            POSTGRES_USER: 'root'
+            POSTGRES_PASSWORD: 'root'
+        volumes:
+            - ./tmp/db:/var/lib/postgresql/data
+        container_name: todo_db

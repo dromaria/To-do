@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  *
@@ -13,8 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $title
  * @property string|null $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @method static Builder|Todo newModelQuery()
  * @method static Builder|Todo newQuery()
  * @method static Builder|Todo query()
@@ -23,6 +24,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|Todo whereId($value)
  * @method static Builder|Todo whereTitle($value)
  * @method static Builder|Todo whereUpdatedAt($value)
+ * @property Carbon|null $deleted_at
+ * @method static Builder|Todo onlyTrashed()
+ * @method static Builder|Todo whereDeletedAt($value)
+ * @method static Builder|Todo withTrashed()
+ * @method static Builder|Todo withoutTrashed()
  * @mixin \Eloquent
  */
 class Todo extends Model
@@ -32,5 +38,4 @@ class Todo extends Model
 
     protected $table = 'todos';
     protected $guarded = false;
-
 }

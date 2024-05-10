@@ -2,57 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTodoRequest;
-use App\Http\Requests\UpdateTodoRequest;
+use App\Actions\Todo\DestroyTodoAction;
+use App\Actions\Todo\IndexTodoAction;
+use App\Actions\Todo\StoreTodoAction;
+use App\Actions\Todo\UpdateTodoAction;
+use App\Http\Requests\Todo\StoreTodoRequest;
+use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Models\Todo;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TodoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): AnonymousResourceCollection
+    public function index(IndexTodoAction $indexTodoAction): ResourceCollection|TodoResource
     {
-        $todos = Todo::all();
+        $todos = $indexTodoAction->execute();
         return TodoResource::collection($todos);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTodoRequest $request): TodoResource
+    public function store(StoreTodoRequest $request, StoreTodoAction $storeTodoAction): TodoResource
     {
         $data = $request->validated();
-        $todo = Todo::create($data);
+        $todo = $storeTodoAction->execute($data);
         return new TodoResource($todo);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Todo $todo): TodoResource
     {
         return new TodoResource($todo);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTodoRequest $request, Todo $todo): TodoResource
+    public function update(UpdateTodoRequest $request, Todo $todo, UpdateTodoAction $updateTodoAction): TodoResource
     {
         $data = $request->validated();
-        $todo->update($data);
+        $updateTodoAction->execute($todo, $data);
         return new TodoResource($todo);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Todo $todo)
+    public function destroy(Todo $todo, DestroyTodoAction $destroyTodoAction): TodoResource
     {
-        $todo->delete();
+        $destroyTodoAction->execute($todo);
         return new TodoResource($todo);
     }
 }

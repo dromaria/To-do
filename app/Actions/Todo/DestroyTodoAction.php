@@ -8,14 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class DestroyTodoAction
 {
-    private TodoRepositoryInterface $todoRepository;
-
-    public function __construct(TodoRepositoryInterface $todoRepository)
+    public function __construct(private TodoRepositoryInterface $todoRepository)
     {
-        $this->todoRepository = $todoRepository;
     }
 
-    public function execute($todo): Model|Todo
+    public function execute(Todo $todo): Model|Todo
     {
         return $this->todoRepository->destroy($todo);
     }

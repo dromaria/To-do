@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\DTO\Todo\StoreTodoDTO;
+use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,17 +16,17 @@ class TodoRepositories implements TodoRepositoryInterface
         return Todo::all();
     }
 
-    public function store($data): Model|Todo
+    public function store(StoreTodoDTO $data): Model|Todo
     {
-        return Todo::create($data);
+        return Todo::create($data->toArray());
     }
 
-    public function update($todo, $data): Model|Todo
+    public function update(Todo $todo, UpdateTodoDTO $data): Model|Todo
     {
-        $todo->update($data);
+        $todo->update($data->toArray());
         return $todo;
     }
-    public function destroy($todo): Model|Todo
+    public function destroy(Todo $todo): Model|Todo
     {
         $todo->delete();
         return $todo;

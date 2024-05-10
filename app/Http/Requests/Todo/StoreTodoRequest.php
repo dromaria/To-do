@@ -19,4 +19,14 @@ class StoreTodoRequest extends FormRequest
             'description'=>['string'],
         ];
     }
+
+    public function getTitle(): string
+    {
+        return $this->validated('title');
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->validated('description');
+    }
 }

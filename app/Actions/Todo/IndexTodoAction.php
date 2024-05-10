@@ -8,10 +8,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 class IndexTodoAction
 {
-    private TodoRepositoryInterface $todoRepository;
-    public function __construct(TodoRepositoryInterface $todoRepository)
+    public function __construct(private TodoRepositoryInterface $todoRepository)
     {
-        $this->todoRepository = $todoRepository;
     }
 
     public function execute(): Collection|Todo

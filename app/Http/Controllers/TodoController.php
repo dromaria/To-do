@@ -6,6 +6,8 @@ use App\Actions\Todo\DestroyTodoAction;
 use App\Actions\Todo\IndexTodoAction;
 use App\Actions\Todo\StoreTodoAction;
 use App\Actions\Todo\UpdateTodoAction;
+use App\DTO\Todo\StoreTodoDTO;
+use App\DTO\Todo\UpdateTodoDTO;
 use App\Http\Requests\Todo\StoreTodoRequest;
 use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\TodoResource;
@@ -22,7 +24,7 @@ class TodoController extends Controller
 
     public function store(StoreTodoRequest $request, StoreTodoAction $storeTodoAction): TodoResource
     {
-        $data = $request->validated();
+        $data = new StoreTodoDTO(['title' => $request->getTitle(), 'description' => $request->getDescription()]);
         $todo = $storeTodoAction->execute($data);
         return new TodoResource($todo);
     }
@@ -34,7 +36,10 @@ class TodoController extends Controller
 
     public function update(UpdateTodoRequest $request, Todo $todo, UpdateTodoAction $updateTodoAction): TodoResource
     {
-        $data = $request->validated();
+        $data = new UpdateTodoDTO(array_filter([
+            'title' => $request->getTitle(),
+            'description' => $request->getDescription()
+        ]));
         $updateTodoAction->execute($todo, $data);
         return new TodoResource($todo);
     }

@@ -6,8 +6,10 @@ use App\Actions\Todo\DestroyTodoAction;
 use App\Actions\Todo\IndexTodoAction;
 use App\Actions\Todo\StoreTodoAction;
 use App\Actions\Todo\UpdateTodoAction;
+use App\DTO\Pagination\PaginationDTO;
 use App\DTO\Todo\StoreTodoDTO;
 use App\DTO\Todo\UpdateTodoDTO;
+use App\Http\Requests\Pagination\PaginationRequest;
 use App\Http\Requests\Todo\StoreTodoRequest;
 use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\TodoResource;
@@ -16,9 +18,12 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TodoController extends Controller
 {
-    public function index(IndexTodoAction $indexTodoAction): ResourceCollection|TodoResource
-    {
-        $todos = $indexTodoAction->execute();
+    public function index(
+        PaginationRequest $request,
+        IndexTodoAction $indexTodoAction,
+    ): ResourceCollection|TodoResource {
+        $data = new PaginationDTO(['limit' => $request->getLimit(), 'offset' => $request->getOffset()]);
+        $todos = $indexTodoAction->execute($data);
         return TodoResource::collection($todos);
     }
 

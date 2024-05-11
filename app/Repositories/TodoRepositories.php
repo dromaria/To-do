@@ -2,18 +2,19 @@
 
 namespace App\Repositories;
 
+use App\DTO\Pagination\PaginationDTO;
 use App\DTO\Todo\StoreTodoDTO;
 use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 
 class TodoRepositories implements TodoRepositoryInterface
 {
-    public function index(): Collection|Todo
+    public function index(PaginationDTO $paginationDTO): LengthAwarePaginator|Todo
     {
-        return Todo::all();
+        return Todo::paginate($paginationDTO->limit, ['*'], 'page', $paginationDTO->offset);
     }
 
     public function store(StoreTodoDTO $data): Model|Todo

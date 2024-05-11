@@ -41,10 +41,7 @@ class TodoController extends Controller
 
     public function update(UpdateTodoRequest $request, Todo $todo, UpdateTodoAction $updateTodoAction): TodoResource
     {
-        $data = new UpdateTodoDTO(array_filter([
-            'title' => $request->getTitle(),
-            'description' => $request->getDescription()
-        ]));
+        $data = new UpdateTodoDTO($request->validated());
         $updateTodoAction->execute($todo, $data);
         return new TodoResource($todo);
     }

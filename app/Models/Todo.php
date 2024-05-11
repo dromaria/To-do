@@ -37,5 +37,5 @@ class Todo extends Model
     use SoftDeletes;
 
     protected $table = 'todos';
-    protected $guarded = false;
+    protected $fillable = ['title', 'description'];
 }

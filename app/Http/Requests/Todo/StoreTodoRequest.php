@@ -2,16 +2,10 @@
 
 namespace App\Http\Requests\Todo;
 
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Authorize\AuthorizeRequest;
 
-class StoreTodoRequest extends FormRequest
+class StoreTodoRequest extends AuthorizeRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

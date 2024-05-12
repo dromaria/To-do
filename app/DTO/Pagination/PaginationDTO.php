@@ -6,7 +6,7 @@ use Illuminate\Support\Fluent;
 
 /**
 * @property int $limit
-* @property int $offset
+* @property int $page
  */
 class PaginationDTO extends Fluent
 {

@@ -2,20 +2,15 @@
 
 namespace App\Http\Requests\Pagination;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Authorize\AuthorizeRequest;
 
-class PaginationRequest extends FormRequest
+class PaginationRequest extends AuthorizeRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [
-            'limit'=>'int',
-            'offset'=>'int',
+            'limit'=>['integer', 'gt:0'],
+            'page'=>['integer', 'gt:0'],
         ];
     }
 
@@ -26,6 +21,6 @@ class PaginationRequest extends FormRequest
 
     public function getOffset(): int
     {
-        return $this->validated('offset') ?? 1;
+        return $this->validated('page') ?? 1;
     }
 }

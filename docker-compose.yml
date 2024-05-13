@@ -9,7 +9,6 @@ services:
         depends_on:
             - db
         environment:
-            APP_KEY: base64:HYL7ToFdCupKbIccJB/ANQUzWkpm5bZApPc0a+awcJY=
             DB_USERNAME: root
             DB_PASSWORD: root
             DB_PORT: 5432
@@ -38,3 +37,4 @@ services:
         volumes:
             - ./tmp/db:/var/lib/postgresql/data
         container_name: todo_db
+

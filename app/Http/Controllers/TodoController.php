@@ -15,6 +15,7 @@ use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Models\Todo;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TodoController extends Controller
 {
@@ -31,6 +32,7 @@ class TodoController extends Controller
     {
         $data = new StoreTodoDTO(['title' => $request->getTitle(), 'description' => $request->getDescription()]);
         $todo = $storeTodoAction->execute($data);
+
         return new TodoResource($todo);
     }
 
@@ -39,10 +41,10 @@ class TodoController extends Controller
         return new TodoResource($todo);
     }
 
-    public function update(UpdateTodoRequest $request, Todo $todo, UpdateTodoAction $updateTodoAction): TodoResource
+    public function update(UpdateTodoRequest $request, int $id, UpdateTodoAction $updateTodoAction): TodoResource
     {
         $data = new UpdateTodoDTO($request->validated());
-        $updateTodoAction->execute($todo, $data);
+        $todo = $updateTodoAction->execute($id, $data);
         return new TodoResource($todo);
     }
 

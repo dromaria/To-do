@@ -6,10 +6,10 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory>tests/Unit</directory>
+            <directory>app/Actions/Todo</directory>
         </testsuite>
-        <testsuite name="Feature">
-            <directory>tests/Feature</directory>
+        <testsuite name="Unit">
+            <directory>app/Http/Controllers/Tests</directory>
         </testsuite>
     </testsuites>
     <source>

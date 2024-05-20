@@ -20,11 +20,13 @@ class TodoRepositories implements TodoRepositoryInterface
 
     public function store(StoreTodoDTO $data): Model|Todo
     {
+
         return Todo::create($data->toArray());
     }
 
-    public function update(Todo $todo, UpdateTodoDTO $data): Model|Todo
+    public function update(int $id, UpdateTodoDTO $data): Todo|Model
     {
+        $todo = Todo::findOrFail($id);
         $todo->update($data->toArray());
         return $todo;
     }

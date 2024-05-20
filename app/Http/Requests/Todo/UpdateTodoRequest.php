@@ -9,8 +9,8 @@ class UpdateTodoRequest extends AuthorizeRequest
     public function rules(): array
     {
         return [
-            'title'=>'string',
-            'description'=>'string',
+            'title'=>['string'],
+            'description'=>['string', 'nullable'],
         ];
     }
 }

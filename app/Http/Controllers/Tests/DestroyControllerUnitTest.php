@@ -2,6 +2,7 @@
 
 use App\Actions\Todo\DestroyTodoAction;
 use App\Models\Todo;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\UnitTestCase;
 use function Pest\Laravel\delete;
 
@@ -20,19 +21,9 @@ test('DESTROY /todos/{id}: 200', function () {
         ->withID(1)
         ->make();
 
-    $todoMock = Mockery::mock(Todo::class);
-
-    $todoMock->shouldReceive('getAttribute')->with('id')->andReturn($data->id);
-    $todoMock->shouldReceive('getAttribute')->with('title')->andReturn($data->title);
-    $todoMock->shouldReceive('getAttribute')->with('description')->andReturn($data->description);
-
-    $todoMock->shouldReceive('resolveRouteBinding')->andReturn($todoMock);
-
-    $this->app->instance(Todo::class, $todoMock);
-
     $this->action->expects('execute')
         ->withAnyArgs()
-        ->andReturn($todoMock);
+        ->andReturn($data);
 
     delete('/api/todos/' . $data->id)->assertOk()
         ->assertJson(
@@ -47,7 +38,7 @@ test('DESTROY /todos/{id}: 200', function () {
 test('PATCH /todos/{id}: 404', function () {
 
     $this->action->expects('execute')
-        ->never();
+        ->andThrow(ModelNotFoundException::class);
 
     delete('/api/todos/1')
         ->assertStatus(404);

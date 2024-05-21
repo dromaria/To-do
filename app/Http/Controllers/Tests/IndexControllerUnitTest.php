@@ -21,21 +21,12 @@ test('GET /todos/: 200', function () {
             'id' => fake()->randomNumber()
         ]);
 
-    $todoMock = Mockery::mock(Todo::class);
-
-    $todoMock->shouldReceive('getAttribute')->with('id')->andReturn($data->id);
-    $todoMock->shouldReceive('getAttribute')->with('title')->andReturn($data->title);
-    $todoMock->shouldReceive('getAttribute')->with('description')->andReturn($data->description);
-
-    $todoMock->shouldReceive('resolveRouteBinding')->andReturn($todoMock);
-
-    $this->app->instance(Todo::class, $todoMock);
-
     $this->action->expects('execute')
         ->withAnyArgs()
-        ->andReturn(collect([$todoMock]));
+        ->andReturn(collect([$data]));
 
-    get('/api/todos/')->assertOk()
+    get('/api/todos/')
+        ->assertOk()
         ->assertJson(
             [
                 'data' => [
@@ -48,39 +39,3 @@ test('GET /todos/: 200', function () {
             ]
         );
 });
-
-/*test('PATCH /todos/{id}: 422', function (array $request) {
-
-    $todoMock = Mockery::mock(Todo::class);
-    $todoMock->shouldReceive('getAttribute')->with('id')->andReturn(1);
-    $todoMock->shouldReceive('getAttribute')->with('title')->andReturn($request['title']);
-    $todoMock->shouldReceive('getAttribute')->with('description')->andReturn($request['description']);
-
-    $todoMock->shouldReceive('resolveRouteBinding')->andReturn($todoMock);
-
-    $this->app->instance(Todo::class, $todoMock);
-
-    $this->action->expects('execute')
-        ->never();
-
-    patch('/api/todos/1', $request)
-        ->assertStatus(422);
-})->with([
-    'empty data' => [
-        ['title'=>'', 'description'=>'']
-    ],
-    'empty title' => [
-        ['title'=>'','description'=>fake()->optional()->text]
-    ]]);
-
-test('PATCH /todos/{id}: 404', function () {
-
-    $this->action->expects('execute')
-        ->never();
-
-    patch('/api/todos/1', [
-        'title' => fake()->title,
-        'description' => fake()->text
-    ])
-        ->assertStatus(404);
-});*/

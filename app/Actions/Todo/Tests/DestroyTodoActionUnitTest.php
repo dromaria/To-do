@@ -14,7 +14,7 @@ beforeEach(function () {
 });
 
 test('todo action success with destroy', function () {
-    /** @var Todo $model */
+
     $model = Todo::factory()
         ->withID(1)
         ->make();
@@ -22,7 +22,6 @@ test('todo action success with destroy', function () {
     $this->repository->expects('destroy')
         ->andReturn($model);
 
-    /** @var Todo $response */
-    $response = $this->action->execute($model);
+    $response = $this->action->execute($model->id);
     expect($response)->toEqual($model);
 });

@@ -30,8 +30,9 @@ class TodoRepositories implements TodoRepositoryInterface
         $todo->update($data->toArray());
         return $todo;
     }
-    public function destroy(Todo $todo): Model|Todo
+    public function destroy(int $id): Model|Todo
     {
+        $todo = Todo::findOrFail($id);
         $todo->delete();
         return $todo;
     }

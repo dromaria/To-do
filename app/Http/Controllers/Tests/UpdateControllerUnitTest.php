@@ -20,14 +20,6 @@ test('PATCH /todos/{id}: 200', function () {
         ->withID(1)
         ->make();
 
-/*    $todoMock = Mockery::mock(Todo::class);
-    $todoMock->shouldReceive('getAttribute')->with('id')->andReturn($data->id);
-    $todoMock->shouldReceive('getAttribute')->with('title')->andReturn($data->title);
-    $todoMock->shouldReceive('getAttribute')->with('description')->andReturn($data->description);
-    $todoMock->shouldReceive('resolveRouteBinding')->andReturn($todoMock);
-
-    $this->app->instance(Todo::class, $todoMock);*/
-
     $this->action->expects('execute')
         ->withAnyArgs()
         ->andReturn($data);
@@ -47,15 +39,6 @@ test('PATCH /todos/{id}: 200', function () {
 
 test('PATCH /todos/{id}: 422', function (array $request) {
 
-    $todoMock = \Mockery::mock(Todo::class);
-    $todoMock->shouldReceive('getAttribute')->with('id')->andReturn(1);
-    $todoMock->shouldReceive('getAttribute')->with('title')->andReturn($request['title']);
-    $todoMock->shouldReceive('getAttribute')->with('description')->andReturn($request['description']);
-
-    $todoMock->shouldReceive('resolveRouteBinding')->andReturn($todoMock);
-
-    $this->app->instance(Todo::class, $todoMock);
-
     $this->action->expects('execute')
         ->never();
 
@@ -71,7 +54,8 @@ test('PATCH /todos/{id}: 422', function (array $request) {
 
 test('PATCH /todos/{id}: 404', function () {
 
-    $this->action->expects('execute')->andThrow(ModelNotFoundException::class);
+    $this->action->expects('execute')
+        ->andThrow(ModelNotFoundException::class);
 
     patch('/api/todos/1', [
         'title' => fake()->title,

@@ -14,5 +14,5 @@ interface TodoRepositoryInterface
     public function index(PaginationDTO $paginationDTO): Collection|Todo;
     public function store(StoreTodoDTO $data): Model|Todo;
     public function update(int $id, UpdateTodoDTO $data): Model|Todo;
-    public function destroy(Todo $todo): Model|Todo;
+    public function destroy(int $id): Model|Todo;
 }

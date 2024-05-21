@@ -1,9 +1,7 @@
 <?php
 
 use App\Actions\Todo\IndexTodoAction;
-use App\Actions\Todo\UpdateTodoAction;
 use App\DTO\Pagination\PaginationDTO;
-use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
 use Tests\UnitTestCase;

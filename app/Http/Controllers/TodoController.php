@@ -15,7 +15,6 @@ use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Models\Todo;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TodoController extends Controller
 {
@@ -48,9 +47,9 @@ class TodoController extends Controller
         return new TodoResource($todo);
     }
 
-    public function destroy(Todo $todo, DestroyTodoAction $destroyTodoAction): TodoResource
+    public function destroy(int $id, DestroyTodoAction $destroyTodoAction): TodoResource
     {
-        $destroyTodoAction->execute($todo);
+        $todo = $destroyTodoAction->execute($id);
         return new TodoResource($todo);
     }
 }

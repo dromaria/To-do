@@ -12,8 +12,8 @@ class DestroyTodoAction
     {
     }
 
-    public function execute(Todo $todo): Model|Todo
+    public function execute(int $id): Model|Todo
     {
-        return $this->todoRepository->destroy($todo);
+        return $this->todoRepository->destroy($id);
     }
 }

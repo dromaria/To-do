@@ -7,7 +7,10 @@ use App\DTO\Todo\StoreTodoDTO;
 use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class TodoRepositories implements TodoRepositoryInterface
@@ -30,10 +33,11 @@ class TodoRepositories implements TodoRepositoryInterface
         $todo->update($data->toArray());
         return $todo;
     }
-    public function destroy(int $id): Model|Todo
+
+    public function destroy(int $id): Application|ResponseFactory|Response
     {
         $todo = Todo::findOrFail($id);
         $todo->delete();
-        return $todo;
+        return response(status: 200);
     }
 }

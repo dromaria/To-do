@@ -22,17 +22,10 @@ test('DESTROY /todos/{id}: 200', function () {
         ->make();
 
     $this->action->expects('execute')
-        ->withAnyArgs()
-        ->andReturn($data);
+        ->with($data->id)
+        ->andReturn(response(status: 200));
 
-    delete('/api/todos/' . $data->id)->assertOk()
-        ->assertJson(
-            ['data' => [
-                'id' => $data->id,
-                'title' => $data->title,
-                'description' => $data->description,
-            ]]
-        );
+    delete('/api/todos/' . $data->id)->assertOk();
 });
 
 test('PATCH /todos/{id}: 404', function () {

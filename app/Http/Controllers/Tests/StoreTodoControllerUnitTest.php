@@ -1,7 +1,9 @@
 <?php
 
 use App\Actions\Todo\StoreTodoAction;
+use App\DTO\Todo\StoreTodoDTO;
 use App\Models\Todo;
+use App\Repositories\Interfaces\TodoRepositoryInterface;
 use Tests\UnitTestCase;
 use function Pest\Laravel\post;
 
@@ -10,6 +12,7 @@ uses(UnitTestCase::class)
 
 
 beforeEach(function () {
+
     $this->action = Mockery::mock(StoreTodoAction::class);
     $this->app->instance(StoreTodoAction::class, $this->action);
 });
@@ -20,8 +23,10 @@ test('POST /todos: 200', function () {
             'id' => fake()->randomNumber(),
         ]);
 
+    $modelDTO = new StoreTodoDTO(['title' => $model->title, 'description' => $model->description]);
+
     $this->action->expects('execute')
-        ->withAnyArgs()
+        ->with(Mockery::mustBe($modelDTO))
         ->andReturn($model);
 
     post('/api/todos', [

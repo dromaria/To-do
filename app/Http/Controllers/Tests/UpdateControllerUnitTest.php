@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Todo\UpdateTodoAction;
+use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\UnitTestCase;
@@ -20,8 +21,10 @@ test('PATCH /todos/{id}: 200', function () {
         ->withID(1)
         ->make();
 
+    $modelDTO = new UpdateTodoDTO(['title' => $data->title, 'description' => $data->description]);
+
     $this->action->expects('execute')
-        ->withAnyArgs()
+        ->with(Mockery::mustBe($modelDTO))
         ->andReturn($data);
 
     patch('/api/todos/' . $data->id, [

@@ -14,7 +14,11 @@ use App\Http\Requests\Todo\StoreTodoRequest;
 use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Models\Todo;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 
 class TodoController extends Controller
 {
@@ -47,9 +51,8 @@ class TodoController extends Controller
         return new TodoResource($todo);
     }
 
-    public function destroy(int $id, DestroyTodoAction $destroyTodoAction): TodoResource
+    public function destroy(int $id, DestroyTodoAction $destroyTodoAction): Application|ResponseFactory|Response
     {
-        $todo = $destroyTodoAction->execute($id);
-        return new TodoResource($todo);
+        return $destroyTodoAction->execute($id);
     }
 }

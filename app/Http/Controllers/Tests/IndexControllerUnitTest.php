@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Todo\IndexTodoAction;
+use App\DTO\Pagination\PaginationDTO;
 use App\Models\Todo;
 use Tests\UnitTestCase;
 use function Pest\Laravel\get;
@@ -16,14 +17,16 @@ beforeEach(function () {
 
 test('GET /todos/: 200', function () {
 
-    $data = Todo::factory()
+    $modelData = Todo::factory()
         ->make([
             'id' => fake()->randomNumber()
         ]);
 
+    $paginationData = new PaginationDTO(['limit' => 10, 'offset' => 1]);
+
     $this->action->expects('execute')
-        ->withAnyArgs()
-        ->andReturn(collect([$data]));
+        ->with(Mockery::mustBe($paginationData))
+        ->andReturn(collect([$modelData]));
 
     get('/api/todos/')
         ->assertOk()
@@ -31,9 +34,9 @@ test('GET /todos/: 200', function () {
             [
                 'data' => [
                     [
-                        'id' => $data->id,
-                        'title' => $data->title,
-                        'description' => $data->description,
+                        'id' => $modelData->id,
+                        'title' => $modelData->title,
+                        'description' => $modelData->description,
                     ]
                 ]
             ]

@@ -4,7 +4,10 @@ namespace App\Actions\Todo;
 
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 
 class DestroyTodoAction
 {
@@ -12,7 +15,7 @@ class DestroyTodoAction
     {
     }
 
-    public function execute(int $id): Model|Todo
+    public function execute(int $id): Application|ResponseFactory|Response
     {
         return $this->todoRepository->destroy($id);
     }

@@ -53,6 +53,7 @@ class TodoController extends Controller
 
     public function destroy(int $id, DestroyTodoAction $destroyTodoAction): Application|ResponseFactory|Response
     {
-        return $destroyTodoAction->execute($id);
+        $destroyTodoAction->execute($id);
+        return response(status:200);
     }
 }

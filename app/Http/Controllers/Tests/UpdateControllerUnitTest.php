@@ -24,7 +24,7 @@ test('PATCH /todos/{id}: 200', function () {
     $modelDTO = new UpdateTodoDTO(['title' => $data->title, 'description' => $data->description]);
 
     $this->action->expects('execute')
-        ->with(Mockery::mustBe($modelDTO))
+        ->with($data->id, Mockery::mustBe($modelDTO))
         ->andReturn($data);
 
     patch('/api/todos/' . $data->id, [

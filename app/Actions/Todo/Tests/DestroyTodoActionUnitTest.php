@@ -20,8 +20,8 @@ test('todo action success with destroy', function () {
         ->make();
 
     $this->repository->expects('destroy')
-        ->andReturn(response(status:200));
+        ->andReturnNull();
 
     $response = $this->action->execute($model->id);
-    expect($response)->toEqual(response(status: 200));
+    expect($response)->toBeNull();
 });

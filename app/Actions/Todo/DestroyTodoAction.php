@@ -15,8 +15,8 @@ class DestroyTodoAction
     {
     }
 
-    public function execute(int $id): Application|ResponseFactory|Response
+    public function execute(int $id): void
     {
-        return $this->todoRepository->destroy($id);
+        $this->todoRepository->destroy($id);
     }
 }

@@ -34,10 +34,9 @@ class TodoRepositories implements TodoRepositoryInterface
         return $todo;
     }
 
-    public function destroy(int $id): Application|ResponseFactory|Response
+    public function destroy(int $id): void
     {
         $todo = Todo::findOrFail($id);
         $todo->delete();
-        return response(status: 200);
     }
 }

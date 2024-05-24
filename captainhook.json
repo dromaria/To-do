@@ -17,7 +17,7 @@
                 "action": "vendor/bin/phpcbf --standard=psr2 app"
             },
             {
-                "action": "vendor/bin/phpstan analyse"
+                "action": "vendor/bin/phpstan analyse --memory-limit 1G"
             }
         ]
     },

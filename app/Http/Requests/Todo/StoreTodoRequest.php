@@ -10,7 +10,7 @@ class StoreTodoRequest extends AuthorizeRequest
     {
         return [
             'title'=>['required', 'string'],
-            'description'=>['string'],
+            'description'=>['string', 'nullable'],
         ];
     }
 

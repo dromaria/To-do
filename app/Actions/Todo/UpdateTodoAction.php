@@ -14,8 +14,8 @@ class UpdateTodoAction
     {
     }
 
-    public function execute(Todo $todo, UpdateTodoDTO $data): Model|Todo
+    public function execute(int $id, UpdateTodoDTO $data): Model|Todo
     {
-        return $this->todoRepository->update($todo, $data);
+        return $this->todoRepository->update($id, $data);
     }
 }

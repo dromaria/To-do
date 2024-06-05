@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Database\Factories\TodoFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Todo whereDeletedAt($value)
  * @method static Builder|Todo withTrashed()
  * @method static Builder|Todo withoutTrashed()
- * @mixin Eloquent
+ * @mixin \Eloquent
  */
 class Todo extends Model
 {

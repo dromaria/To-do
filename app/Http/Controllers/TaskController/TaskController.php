@@ -26,7 +26,7 @@ class TaskController extends Controller
         PaginationRequest $request,
         IndexTaskAction $indexTaskAction,
         int $todo_id
-    ): ResourceCollection|TaskResource {
+    ): ResourceCollection {
         $data = new PaginationDTO(['limit' => $request->getLimit(), 'offset' => $request->getOffset()]);
         $tasks = $indexTaskAction->execute($data, $todo_id);
         return TaskResource::collection($tasks);

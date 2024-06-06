@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 
 interface TaskRepositoryInterface
 {
-    public function index(PaginationDTO $paginationDTO, int $todo_id): Collection|Task;
+    public function index(PaginationDTO $paginationDTO, int $todo_id): Collection;
     public function store(StoreTaskDTO $data): Model|Task;
     public function show(int $id): Model|Task;
     public function update(int $id, UpdateTaskDTO $data): Model|Task;

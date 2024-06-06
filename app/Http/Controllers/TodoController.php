@@ -25,7 +25,7 @@ class TodoController extends Controller
     public function index(
         PaginationRequest $request,
         IndexTodoAction $indexTodoAction,
-    ): ResourceCollection|TodoResource {
+    ): ResourceCollection {
         $data = new PaginationDTO(['limit' => $request->getLimit(), 'offset' => $request->getOffset()]);
         $todos = $indexTodoAction->execute($data);
         return TodoResource::collection($todos);

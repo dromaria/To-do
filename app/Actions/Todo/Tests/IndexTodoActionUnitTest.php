@@ -22,8 +22,8 @@ test('todo action success with index', function () {
     $dto = new PaginationDTO();
 
     $this->repository->expects('index')
-        ->andReturn($model);
+        ->andReturn(collect($model));
 
     $response = $this->action->execute($dto);
-    expect($response)->toEqual($model);
+    expect($response)->toEqual(collect($model));
 });

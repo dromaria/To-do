@@ -13,7 +13,7 @@ class IndexTaskAction
     {
     }
 
-    public function execute(PaginationDTO $paginationDTO, int $todo_id): Collection|Task
+    public function execute(PaginationDTO $paginationDTO, int $todo_id): Collection
     {
         return $this->taskRepository->index($paginationDTO, $todo_id);
     }

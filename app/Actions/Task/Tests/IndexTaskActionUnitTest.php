@@ -24,8 +24,8 @@ test('task action success with index', function () {
 
     $dto = new PaginationDTO();
 
-    $this->repository->expects('index')->andReturn($modelTask);
+    $this->repository->expects('index')->andReturn(collect($modelTask));
 
     $response = $this->action->execute($dto, $modelTask->todo_id);
-    expect($response)->toEqual($modelTask);
+    expect($response)->toEqual(collect($modelTask));
 });

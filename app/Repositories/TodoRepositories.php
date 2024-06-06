@@ -7,10 +7,7 @@ use App\DTO\Todo\StoreTodoDTO;
 use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class TodoRepositories implements TodoRepositoryInterface

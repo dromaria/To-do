@@ -14,7 +14,7 @@ beforeEach(function () {
     $this->app->instance(ShowTaskAction::class, $this->action);
 });
 
-test('GET /todos/{id}/tasks/{id}: 200', function () {
+test('GET /todos/tasks/{id}: 200', function () {
 
     $data = Task::factory()
         ->withID(1)
@@ -25,7 +25,7 @@ test('GET /todos/{id}/tasks/{id}: 200', function () {
         ->andReturn($data);
 
     get(
-        'api/todos/' . $data->todo_id . '/tasks/' . $data->id,
+        'api/todos/tasks/' . $data->id,
         [
         'title' => $data->title,
         'description' => $data->description,
@@ -46,12 +46,12 @@ test('GET /todos/{id}/tasks/{id}: 200', function () {
         ]);
 });
 
-test('GET /todos/{id}/tasks/{id}: 404', function () {
+test('GET /todos/tasks/{id}: 404', function () {
 
     $this->action->expects('execute')
         ->andThrow(ModelNotFoundException::class);
 
-    get('api/todos/1/tasks/1', [
+    get('api/todos/tasks/1', [
         'title' => fake()->title,
         'description' => fake()->optional()->text,
         'state' => fake()->boolean,

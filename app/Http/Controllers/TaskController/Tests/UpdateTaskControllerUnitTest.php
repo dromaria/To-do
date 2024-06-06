@@ -16,7 +16,7 @@ beforeEach(function () {
     $this->app->instance(UpdateTaskAction::class, $this->action);
 });
 
-test('PATCH /todos/{id}/tasks/{id}: 200', function () {
+test('PATCH /todos/tasks/{id}: 200', function () {
 
     $data = Task::factory()
         ->withID(1)
@@ -36,7 +36,7 @@ test('PATCH /todos/{id}/tasks/{id}: 200', function () {
         ->andReturn($data);
 
     patch(
-        'api/todos/' . $data->todo_id . '/tasks/' . $data->id,
+        'api/todos/tasks/' . $data->id,
         [
         'title' => $data->title,
         'description' => $data->description,
@@ -57,12 +57,12 @@ test('PATCH /todos/{id}/tasks/{id}: 200', function () {
         ]);
 });
 
-test('PATCH /todos/{id}/tasks/{id}: 422', function (array $request) {
+test('PATCH /todos/tasks/{id}: 422', function (array $request) {
 
     $this->action->expects('execute')
         ->never();
 
-    patch('api/todos/1/tasks/1', $request)->assertStatus(422);
+    patch('api/todos/tasks/1', $request)->assertStatus(422);
 })->with([
     'empty data' => [
         ['title' => '']
@@ -75,12 +75,12 @@ test('PATCH /todos/{id}/tasks/{id}: 422', function (array $request) {
     ]
 ]);
 
-test('PATCH /todos/{id}/tasks/{id}: 404', function () {
+test('PATCH /todos/tasks/{id}: 404', function () {
 
     $this->action->expects('execute')
         ->andThrow(ModelNotFoundException::class);
 
-    patch('api/todos/1/tasks/1', [
+    patch('api/todos/tasks/1', [
         'title' => fake()->title,
         'description' => fake()->optional()->text,
         'state' => fake()->boolean,

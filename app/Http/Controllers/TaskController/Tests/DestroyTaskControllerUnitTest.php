@@ -15,7 +15,7 @@ beforeEach(function () {
     $this->app->instance(DestroyTaskAction::class, $this->action);
 });
 
-test('DELETE /todos/{id}/tasks/{id}: 200', function () {
+test('DELETE /todos/tasks/{id}: 200', function () {
 
     $data = Task::factory()
         ->withID(1)
@@ -26,7 +26,7 @@ test('DELETE /todos/{id}/tasks/{id}: 200', function () {
         ->andReturnNull();
 
     delete(
-        'api/todos/' . $data->todo_id . '/tasks/' . $data->id,
+        'api/todos/tasks/' . $data->id,
         [
         'title' => $data->title,
         'description' => $data->description,
@@ -36,10 +36,10 @@ test('DELETE /todos/{id}/tasks/{id}: 200', function () {
     )->assertOk();
 });
 
-test('DELETE /todos/{id}/tasks/{id}: 404', function () {
+test('DELETE /todos/tasks/{id}: 404', function () {
 
     $this->action->expects('execute')
         ->andThrow(ModelNotFoundException::class);
 
-    delete('api/todos/1/tasks/1')->assertStatus(404);
+    delete('api/todos/tasks/1')->assertStatus(404);
 });

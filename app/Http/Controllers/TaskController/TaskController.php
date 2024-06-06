@@ -39,7 +39,7 @@ class TaskController extends Controller
         return new TaskResource($task);
     }
 
-    public function show(ShowTaskAction $showTaskAction, int $_, int $id): TaskResource
+    public function show(ShowTaskAction $showTaskAction, int $id): TaskResource
     {
         $task = $showTaskAction->execute($id);
 
@@ -49,7 +49,6 @@ class TaskController extends Controller
     public function update(
         UpdateTaskRequest $request,
         UpdateTaskAction $updateTaskAction,
-        int $_,
         int $id
     ): TaskResource {
         $data = new UpdateTaskDTO($request->validated());
@@ -57,7 +56,7 @@ class TaskController extends Controller
         return new TaskResource($task);
     }
 
-    public function destroy(DestroyTaskAction $destroyTaskAction, int $_, int $id): Application|Response|ResponseFactory
+    public function destroy(DestroyTaskAction $destroyTaskAction, int $id): Application|Response|ResponseFactory
     {
         $destroyTaskAction->execute($id);
         return response(status: 200);

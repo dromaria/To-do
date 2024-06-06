@@ -19,7 +19,7 @@ test('task action success with update', function () {
 
     $model = Task::factory()
         ->withID(1)
-        ->make();
+        ->make(['todo_id' => fake()->randomNumber()]);
 
     $dto = new UpdateTaskDTO();
 

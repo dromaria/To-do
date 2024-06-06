@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Todo;
 
 use App\Actions\Todo\DestroyTodoAction;
 use App\Actions\Todo\IndexTodoAction;
@@ -9,6 +9,7 @@ use App\Actions\Todo\UpdateTodoAction;
 use App\DTO\Pagination\PaginationDTO;
 use App\DTO\Todo\StoreTodoDTO;
 use App\DTO\Todo\UpdateTodoDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Pagination\PaginationRequest;
 use App\Http\Requests\Todo\StoreTodoRequest;
 use App\Http\Requests\Todo\UpdateTodoRequest;
@@ -16,7 +17,6 @@ use App\Http\Resources\TodoResource;
 use App\Models\Todo;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 

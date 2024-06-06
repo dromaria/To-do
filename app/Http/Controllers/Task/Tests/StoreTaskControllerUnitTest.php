@@ -19,7 +19,7 @@ test('POST /todos/{id}/tasks: 200', function () {
 
     $data = Task::factory()
         ->withID(1)
-        ->make();
+        ->make(['todo_id' => fake()->randomNumber()]);
 
     $modelDTO = new StoreTaskDTO(
         [

@@ -18,7 +18,7 @@ beforeEach(function () {
 test('GET /todos/{id}/tasks: 200', function () {
 
     $modelData = Task::factory()
-        ->make(['id' => fake()->randomNumber()]);
+        ->make(['id' => fake()->randomNumber(), 'todo_id' => fake()->randomNumber()]);
 
     $paginationData = new PaginationDTO(['limit' => 10, 'offset' => 1]);
 

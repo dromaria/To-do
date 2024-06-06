@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\TaskController\TaskController;
-use App\Http\Controllers\TodoController;
+use App\Http\Controllers\Task\TaskController;
+use App\Http\Controllers\Todo\TodoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

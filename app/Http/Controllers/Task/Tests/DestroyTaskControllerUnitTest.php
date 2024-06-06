@@ -19,7 +19,7 @@ test('DELETE /todos/tasks/{id}: 200', function () {
 
     $data = Task::factory()
         ->withID(1)
-        ->make();
+        ->make(['todo_id' => fake()->randomNumber()]);
 
     $this->action->expects('execute')
         ->with($data->id)

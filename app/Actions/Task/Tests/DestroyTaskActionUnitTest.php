@@ -18,7 +18,7 @@ test('task action success with delete', function () {
 
     $model = Task::factory()
         ->withID(1)
-        ->make();
+        ->make(['todo_id' => fake()->randomNumber()]);
 
     $this->repository->expects('destroy')->andReturnNull();
 

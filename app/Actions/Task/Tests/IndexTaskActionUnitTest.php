@@ -20,7 +20,7 @@ test('task action success with index', function () {
 
     $modelTask = Task::factory()
         ->withID(1)
-        ->make();
+        ->make(['todo_id' => fake()->randomNumber()]);
 
     $dto = new PaginationDTO();
 

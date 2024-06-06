@@ -18,7 +18,7 @@ test('task action success with show', function () {
 
     $model = Task::factory()
         ->withID(1)
-        ->make();
+        ->make(['todo_id' => fake()->randomNumber()]);
 
     $this->repository->expects('show')->andReturn($model);
 

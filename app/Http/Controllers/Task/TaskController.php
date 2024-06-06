@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\TaskController;
+namespace App\Http\Controllers\Task;
 
 use App\Actions\Task\DestroyTaskAction;
 use App\Actions\Task\IndexTaskAction;

@@ -30,7 +30,7 @@ test('DELETE /todos/tasks/{id}: 200', function () {
         [
         'title' => $data->title,
         'description' => $data->description,
-        'state' => $data->state,
+        'is_active' => $data->is_active,
         'estimation' => $data->estimation
         ]
     )->assertOk();

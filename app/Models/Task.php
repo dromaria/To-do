@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @property int $todo_id
  * @property string $title
  * @property string|null $description
- * @property bool $state
+ * @property bool $is_active
  * @property string|null $estimation
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

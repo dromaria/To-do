@@ -26,7 +26,7 @@ test('POST /todos/{id}/tasks: 200', function () {
         'todo_id'  => $data->todo_id,
         'title' => $data->title,
         'description' => $data->description,
-        'state' => $data->state,
+        'is_active' => $data->is_active,
         'estimation' => $data->estimation
         ]
     );
@@ -40,7 +40,7 @@ test('POST /todos/{id}/tasks: 200', function () {
         [
         'title' => $data->title,
         'description' => $data->description,
-        'state' => $data->state,
+        'is_active' => $data->is_active,
         'estimation' => $data->estimation
         ]
     )->assertOk()
@@ -51,7 +51,7 @@ test('POST /todos/{id}/tasks: 200', function () {
             'todo_id' => $data->todo_id,
             'title' => $data->title,
             'description' => $data->description,
-            'state' => $data->state,
+            'is_active' => $data->is_active,
             'estimation' => $data->estimation
             ]
     ]);

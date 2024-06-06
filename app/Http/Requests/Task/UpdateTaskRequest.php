@@ -11,7 +11,7 @@ class UpdateTaskRequest extends AuthorizeRequest
         return [
             'title' => ['string'],
             'description' => ['string', 'nullable'],
-            'state' => ['boolean'],
+            'is_active' => ['boolean'],
             'estimation' => ['date', 'nullable'],
         ];
     }

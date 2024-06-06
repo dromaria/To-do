@@ -29,7 +29,7 @@ test('GET /todos/tasks/{id}: 200', function () {
         [
         'title' => $data->title,
         'description' => $data->description,
-        'state' => $data->state,
+        'is_active' => $data->is_active,
         'estimation' => $data->estimation
         ]
     )->assertOk()
@@ -40,7 +40,7 @@ test('GET /todos/tasks/{id}: 200', function () {
                     'todo_id' => $data->todo_id,
                     'title' => $data->title,
                     'description' => $data->description,
-                    'state' => $data->state,
+                    'is_active' => $data->is_active,
                     'estimation' => $data->estimation
                 ]
         ]);
@@ -54,7 +54,7 @@ test('GET /todos/tasks/{id}: 404', function () {
     get('api/todos/tasks/1', [
         'title' => fake()->title,
         'description' => fake()->optional()->text,
-        'state' => fake()->boolean,
+        'is_active' => fake()->boolean,
         'estimation' => fake()->date
     ])->assertStatus(404);
 });

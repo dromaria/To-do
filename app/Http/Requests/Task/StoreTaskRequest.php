@@ -11,7 +11,7 @@ class StoreTaskRequest extends AuthorizeRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['string', 'nullable'],
-            'state' => ['boolean'],
+            'is_active' => ['boolean'],
             'estimation' => ['date', 'nullable'],
         ];
     }

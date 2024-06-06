@@ -16,7 +16,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('title');
             $table->string('description')->nullable();
-            $table->boolean('state')->default(false);
+            $table->boolean('is_active')->default(false);
             $table->timestamp('estimation')->nullable();
             $table->timestamps();
             $table->softDeletes();

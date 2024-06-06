@@ -35,7 +35,7 @@ test('GET /todos/{id}/tasks: 200', function () {
                     'todo_id' => $modelData->todo_id,
                     'title' => $modelData->title,
                     'description' => $modelData->description,
-                    'state' => $modelData->state,
+                    'is_active' => $modelData->is_active,
                     'estimation' => $modelData->estimation
                 ]]
         ]);

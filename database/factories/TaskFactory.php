@@ -17,7 +17,7 @@ class TaskFactory extends Factory
             'todo_id' => Todo::factory(),
             'title' => $this->faker->title,
             'description' => $this->faker->optional()->text,
-            'state' => $this->faker->boolean,
+            'is_active' => $this->faker->boolean,
             'estimation' => $this->faker->optional()->date,
         ];
     }

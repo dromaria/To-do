@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Todo;
 
 use App\Actions\Todo\DestroyTodoAction;
 use App\Actions\Todo\IndexTodoAction;
+use App\Actions\Todo\ShowTodoAction;
 use App\Actions\Todo\StoreTodoAction;
 use App\Actions\Todo\UpdateTodoAction;
 use App\DTO\Pagination\PaginationDTO;
@@ -14,7 +15,6 @@ use App\Http\Requests\Pagination\PaginationRequest;
 use App\Http\Requests\Todo\StoreTodoRequest;
 use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\TodoResource;
-use App\Models\Todo;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -39,8 +39,9 @@ class TodoController extends Controller
         return new TodoResource($todo);
     }
 
-    public function show(Todo $todo): TodoResource
+    public function show(int $id, ShowTodoAction $showTodoAction): TodoResource
     {
+        $todo = $showTodoAction->execute($id);
         return new TodoResource($todo);
     }
 

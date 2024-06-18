@@ -24,6 +24,11 @@ class TodoRepositories implements TodoRepositoryInterface
         return Todo::create($data->toArray());
     }
 
+    public function show(int $id): Model|Todo
+    {
+        return Todo::findOrFail($id);
+    }
+
     public function update(int $id, UpdateTodoDTO $data): Model|Todo
     {
         $todo = Todo::findOrFail($id);

@@ -25,13 +25,7 @@ test('GET /todos/tasks/{id}: 200', function () {
         ->andReturn($data);
 
     get(
-        'api/todos/tasks/' . $data->id,
-        [
-        'title' => $data->title,
-        'description' => $data->description,
-        'is_active' => $data->is_active,
-        'estimation' => $data->estimation
-        ]
+        'api/todos/tasks/' . $data->id
     )->assertOk()
         ->assertJson([
             'data' =>

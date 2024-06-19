@@ -13,7 +13,7 @@ class IndexTodoAction
     {
     }
 
-    public function execute(PaginationDTO $paginationDTO): Collection|Todo
+    public function execute(PaginationDTO $paginationDTO): Collection
     {
         return $this->todoRepository->index($paginationDTO);
     }

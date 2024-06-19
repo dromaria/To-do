@@ -7,15 +7,12 @@ use App\DTO\Todo\StoreTodoDTO;
 use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class TodoRepositories implements TodoRepositoryInterface
 {
-    public function index(PaginationDTO $paginationDTO): Collection|Todo
+    public function index(PaginationDTO $paginationDTO): Collection
     {
         $offset = ($paginationDTO->page - 1) * $paginationDTO->limit;
         return Todo::offset($offset)->limit($paginationDTO->limit)->get();
@@ -27,7 +24,12 @@ class TodoRepositories implements TodoRepositoryInterface
         return Todo::create($data->toArray());
     }
 
-    public function update(int $id, UpdateTodoDTO $data): Todo|Model
+    public function show(int $id): Model|Todo
+    {
+        return Todo::findOrFail($id);
+    }
+
+    public function update(int $id, UpdateTodoDTO $data): Model|Todo
     {
         $todo = Todo::findOrFail($id);
         $todo->update($data->toArray());

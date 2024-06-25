@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthUserController;
+use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Todo\TodoController;
 use Illuminate\Http\Request;
@@ -17,15 +18,11 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-
-    //Route::post('login', 'AuthController@login');
-    Route::post('login', [AuthController::class, 'login']);
-    //Route::post('logout', 'AuthController@logout');
-    Route::post('logout', [AuthController::class, 'logout']);
-    //Route::post('refresh', 'AuthController@refresh');
-    Route::post('refresh', [AuthController::class, 'refresh']);
-    //Route::post('me', 'AuthController@me');
-    Route::post('me', [AuthController::class, 'me']);
+    Route::post('login', [AuthUserController::class, 'login']);
+    Route::post('logout', [AuthUserController::class, 'logout']);
+    Route::post('refresh', [AuthUserController::class, 'refresh']);
+    Route::post('me', [AuthUserController::class, 'me']);
+    Route::post('register', [RegisterUserController::class, 'store']);
 });
 
 

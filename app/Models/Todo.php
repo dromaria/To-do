@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Database\Factories\TodoFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -14,6 +16,7 @@ use Illuminate\Support\Carbon;
  *
  *
  * @property int $id
+ * @property int $user_id
  * @property string $title
  * @property string|null $description
  * @property Carbon|null $created_at
@@ -31,6 +34,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Todo whereDeletedAt($value)
  * @method static Builder|Todo withTrashed()
  * @method static Builder|Todo withoutTrashed()
+ * @property-read Collection<int, Task> $tasks
+ * @property-read int|null $tasks_count
+ * @property-read User $user
+ * @method static Builder|Todo whereUserId($value)
  * @mixin \Eloquent
  */
 class Todo extends Model
@@ -39,7 +46,12 @@ class Todo extends Model
     use SoftDeletes;
 
     protected $table = 'todos';
-    protected $fillable = ['title', 'description'];
+    protected $fillable = ['user_id', 'title', 'description'];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function tasks(): HasMany
     {

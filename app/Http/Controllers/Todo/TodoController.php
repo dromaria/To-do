@@ -33,7 +33,12 @@ class TodoController extends Controller
 
     public function store(StoreTodoRequest $request, StoreTodoAction $storeTodoAction): TodoResource
     {
-        $data = new StoreTodoDTO(['title' => $request->getTitle(), 'description' => $request->getDescription()]);
+        $data = new StoreTodoDTO([
+            'user_id' => auth()->user()->getAuthIdentifier(),
+            'title' => $request->getTitle(),
+            'description' => $request->getDescription()
+        ]);
+
         $todo = $storeTodoAction->execute($data);
 
         return new TodoResource($todo);

@@ -26,9 +26,9 @@ Route::group([
 });
 
 
-Route::apiResource('todos', TodoController::class);
+Route::apiResource('todos', TodoController::class)->middleware('jwt.auth');
 
-Route::controller(TaskController::class)->group(function () {
+Route::controller(TaskController::class)->middleware('jwt.auth')->group(function () {
     Route::get('todos/{id}/tasks', 'index');
     Route::post('todos/{id}/tasks', 'store');
     Route::get('todos/tasks/{id}', 'show');

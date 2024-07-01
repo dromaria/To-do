@@ -14,8 +14,14 @@ class UpdateTodoAction
     {
     }
 
-    public function execute(int $id, UpdateTodoDTO $data): Model|Todo
+    public function execute(int $id, UpdateTodoDTO $data): Todo
     {
+        $todo = $this->todoRepository->show($id);
+
+        if (auth()->user()->cannot('check', [Todo::class, $todo->user_id])) {
+            abort(403);
+        }
+
         return $this->todoRepository->update($id, $data);
     }
 }

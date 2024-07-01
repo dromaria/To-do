@@ -18,17 +18,17 @@ class TaskRepositories implements TaskRepositoryInterface
         return Task::where('todo_id', $todo_id)->offset($offset)->limit($paginationDTO->limit)->get();
     }
 
-    public function store(StoreTaskDTO $data): Model|Task
+    public function store(StoreTaskDTO $data): Task
     {
         return Task::create($data->toArray());
     }
 
-    public function show(int $id): Model|Task
+    public function show(int $id): Task
     {
         return Task::findOrFail($id);
     }
 
-    public function update(int $id, UpdateTaskDTO $data): Model|Task
+    public function update(int $id, UpdateTaskDTO $data): Task
     {
         $task = Task::findOrFail($id);
         $task->update($data->toArray());
@@ -38,5 +38,10 @@ class TaskRepositories implements TaskRepositoryInterface
     {
         $task = Task::findOrFail($id);
         $task->delete();
+    }
+
+    public function findUserAndTask(int $id): Task
+    {
+        return Task::where('id', $id)->with('todo:id,user_id')->firstOrFail();
     }
 }

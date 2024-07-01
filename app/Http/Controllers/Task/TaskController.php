@@ -7,6 +7,7 @@ use App\Actions\Task\IndexTaskAction;
 use App\Actions\Task\ShowTaskAction;
 use App\Actions\Task\StoreTaskAction;
 use App\Actions\Task\UpdateTaskAction;
+use App\Actions\Todo\ShowTodoAction;
 use App\DTO\Pagination\PaginationDTO;
 use App\DTO\Task\StoreTaskDTO;
 use App\DTO\Task\UpdateTaskDTO;
@@ -25,17 +26,22 @@ class TaskController extends Controller
     public function index(
         PaginationRequest $request,
         IndexTaskAction $indexTaskAction,
+        ShowTodoAction $showTodoAction,
         int $todo_id
     ): ResourceCollection {
         $data = new PaginationDTO(['limit' => $request->getLimit(), 'offset' => $request->getOffset()]);
-        $tasks = $indexTaskAction->execute($data, $todo_id);
+        $tasks = $indexTaskAction->execute($data, $todo_id, $showTodoAction);
         return TaskResource::collection($tasks);
     }
 
-    public function store(StoreTaskRequest $request, StoreTaskAction $storeTaskAction, int $todo_id): TaskResource
-    {
+    public function store(
+        StoreTaskRequest $request,
+        StoreTaskAction $storeTaskAction,
+        ShowTodoAction $showTodoAction,
+        int $todo_id
+    ): TaskResource {
         $data = new StoreTaskDTO(['todo_id' => $todo_id, ...($request->validated())]);
-        $task = $storeTaskAction->execute($data);
+        $task = $storeTaskAction->execute($data, $showTodoAction);
         return new TaskResource($task);
     }
 

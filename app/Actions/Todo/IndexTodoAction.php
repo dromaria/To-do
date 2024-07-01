@@ -3,7 +3,6 @@
 namespace App\Actions\Todo;
 
 use App\DTO\Pagination\PaginationDTO;
-use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
 use Illuminate\Support\Collection;
 
@@ -15,6 +14,7 @@ class IndexTodoAction
 
     public function execute(PaginationDTO $paginationDTO): Collection
     {
-        return $this->todoRepository->index($paginationDTO);
+        $userId = auth()->user()->getAuthIdentifier();
+        return $this->todoRepository->index($paginationDTO, $userId);
     }
 }

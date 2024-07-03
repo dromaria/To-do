@@ -12,24 +12,23 @@ use Illuminate\Support\Collection;
 
 class TodoRepositories implements TodoRepositoryInterface
 {
-    public function index(PaginationDTO $paginationDTO): Collection
+    public function index(PaginationDTO $paginationDTO, int $userId): Collection
     {
         $offset = ($paginationDTO->page - 1) * $paginationDTO->limit;
-        return Todo::offset($offset)->limit($paginationDTO->limit)->get();
+        return Todo::offset($offset)->limit($paginationDTO->limit)->where('user_id', $userId)->get();
     }
 
-    public function store(StoreTodoDTO $data): Model|Todo
+    public function store(StoreTodoDTO $data): Todo
     {
-
         return Todo::create($data->toArray());
     }
 
-    public function show(int $id): Model|Todo
+    public function show(int $id): Todo
     {
         return Todo::findOrFail($id);
     }
 
-    public function update(int $id, UpdateTodoDTO $data): Model|Todo
+    public function update(int $id, UpdateTodoDTO $data): Todo
     {
         $todo = Todo::findOrFail($id);
         $todo->update($data->toArray());

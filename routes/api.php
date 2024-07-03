@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthUserController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\RegisterUserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Todo\TodoController;
 use Illuminate\Http\Request;
@@ -9,9 +13,30 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::apiResource('todos', TodoController::class);
 
-Route::controller(TaskController::class)->group(function () {
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+    Route::post('login', [AuthUserController::class, 'login'])->middleware('guest');
+    Route::post('logout', [AuthUserController::class, 'logout']);
+    Route::post('refresh', [AuthUserController::class, 'refresh']);
+    Route::post('me', [AuthUserController::class, 'me']);
+    Route::post('register', [RegisterUserController::class, 'store'])->middleware('guest');
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['auth','signed', 'throttle:6,1'])
+        ->name('verification.verify');
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware(['auth', 'throttle:6,1'])
+        ->name('verification.send');
+});
+
+
+Route::apiResource('todos', TodoController::class)->middleware('jwt.auth');
+
+Route::controller(TaskController::class)->middleware('jwt.auth')->group(function () {
     Route::get('todos/{id}/tasks', 'index');
     Route::post('todos/{id}/tasks', 'store');
     Route::get('todos/tasks/{id}', 'show');

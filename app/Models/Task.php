@@ -36,6 +36,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Task whereTitle($value)
  * @method static Builder|Task whereTodoId($value)
  * @method static Builder|Task whereUpdatedAt($value)
+ * @method static Builder|Task onlyTrashed()
+ * @method static Builder|Task whereEstimation($value)
+ * @method static Builder|Task whereIsActive($value)
+ * @method static Builder|Task withTrashed()
+ * @method static Builder|Task withoutTrashed()
  * @mixin \Eloquent
  */
 class Task extends Model

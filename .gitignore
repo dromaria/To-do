@@ -20,4 +20,4 @@ yarn-error.log
 .editorconfig
 /tmp
 phpstan.neon
-.ide_helper.php
+_ide_helper.php

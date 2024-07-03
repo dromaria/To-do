@@ -5,7 +5,6 @@ namespace App\Actions\Auth;
 use App\DTO\User\UserDTO;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
 
 class RegisterAction
 {
@@ -13,7 +12,7 @@ class RegisterAction
     {
     }
 
-    public function execute(UserDTO $data): Model|User
+    public function execute(UserDTO $data): User
     {
         return $this->userRepository->register($data);
     }

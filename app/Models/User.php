@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,6 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
- *
  *
  * @property int $id
  * @property string $name
@@ -43,7 +43,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read int|null $todos_count
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasFactory, Notifiable;
 

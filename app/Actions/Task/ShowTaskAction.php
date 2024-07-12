@@ -5,7 +5,7 @@ namespace App\Actions\Task;
 use App\Models\Task;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ShowTaskAction
 {
@@ -17,7 +17,7 @@ class ShowTaskAction
     {
         $todoWithUser = $this->taskRepository->findUserAndTask($id);
 
-        if (auth()->user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
+        if (Auth::user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
             abort(403);
         }
 

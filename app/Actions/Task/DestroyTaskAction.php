@@ -4,6 +4,7 @@ namespace App\Actions\Task;
 
 use App\Models\Todo;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class DestroyTaskAction
 {
@@ -15,7 +16,7 @@ class DestroyTaskAction
     {
         $todoWithUser = $this->taskRepository->findUserAndTask($id);
 
-        if (auth()->user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
+        if (Auth::user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
             abort(403);
         }
 

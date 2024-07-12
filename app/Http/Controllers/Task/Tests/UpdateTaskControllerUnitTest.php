@@ -4,12 +4,13 @@
 use App\Actions\Task\UpdateTaskAction;
 use App\DTO\Task\UpdateTaskDTO;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\UnitTestCase;
 use function Pest\Laravel\patch;
 
 uses(UnitTestCase::class)
-->group('unit', 'action', 'controller', 'update');
+->group('unit', 'controller', 'task', 'update');
 
 beforeEach(function () {
     $this->action = Mockery::mock(UpdateTaskAction::class);
@@ -18,8 +19,15 @@ beforeEach(function () {
 
 test('PATCH /todos/tasks/{id}: 200', function () {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $data = Task::factory()
         ->withID(1)
+        ->recycle($user)
         ->make(['todo_id' => fake()->randomNumber()]);
 
     $modelDTO = new UpdateTaskDTO(
@@ -42,7 +50,8 @@ test('PATCH /todos/tasks/{id}: 200', function () {
         'description' => $data->description,
         'is_active' => $data->is_active,
         'estimation' => $data->estimation
-        ]
+        ],
+        ['Authorization' => 'Bearer ' . $token]
     )->assertOk()
         ->assertJson([
             'data' =>
@@ -59,10 +68,16 @@ test('PATCH /todos/tasks/{id}: 200', function () {
 
 test('PATCH /todos/tasks/{id}: 422', function (array $request) {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $this->action->expects('execute')
         ->never();
 
-    patch('api/todos/tasks/1', $request)->assertStatus(422);
+    patch('api/todos/tasks/1', $request, ['Authorization' => 'Bearer ' . $token])->assertStatus(422);
 })->with([
     'empty data' => [
         ['title' => '']
@@ -77,13 +92,23 @@ test('PATCH /todos/tasks/{id}: 422', function (array $request) {
 
 test('PATCH /todos/tasks/{id}: 404', function () {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $this->action->expects('execute')
         ->andThrow(ModelNotFoundException::class);
 
-    patch('api/todos/tasks/1', [
+    patch(
+        'api/todos/tasks/1',
+        [
         'title' => fake()->title,
         'description' => fake()->optional()->text,
         'is_active' => fake()->boolean,
         'estimation' => fake()->date
-    ])->assertStatus(404);
+        ],
+        ['Authorization' => 'Bearer ' . $token]
+    )->assertStatus(404);
 });

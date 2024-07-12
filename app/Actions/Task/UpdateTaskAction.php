@@ -6,7 +6,7 @@ use App\DTO\Task\UpdateTaskDTO;
 use App\Models\Task;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateTaskAction
 {
@@ -18,7 +18,7 @@ class UpdateTaskAction
     {
         $todoWithUser = $this->taskRepository->findUserAndTask($id);
 
-        if (auth()->user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
+        if (Auth::user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
             abort(403);
         }
 

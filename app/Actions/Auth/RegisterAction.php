@@ -2,10 +2,9 @@
 
 namespace App\Actions\Auth;
 
-use App\DTO\User\UserDTO;
+use App\DTO\User\RegisterUserDTO;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
 
 class RegisterAction
 {
@@ -13,8 +12,8 @@ class RegisterAction
     {
     }
 
-    public function execute(UserDTO $data): Model|User
+    public function execute(RegisterUserDTO $data): void
     {
-        return $this->userRepository->register($data);
+        $this->userRepository->register($data);
     }
 }

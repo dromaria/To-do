@@ -16,7 +16,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  *
- *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -27,7 +26,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property Carbon|null $updated_at
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User query()
@@ -77,8 +75,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
+    }
+
+    public static function factory(): UserFactory
+    {
+        return UserFactory::new();
     }
 
     public function getJWTIdentifier()

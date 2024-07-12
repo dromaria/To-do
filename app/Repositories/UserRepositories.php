@@ -2,15 +2,16 @@
 
 namespace App\Repositories;
 
-use App\DTO\User\UserDTO;
+use App\DTO\User\RegisterUserDTO;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepositories implements UserRepositoryInterface
 {
-    public function register(UserDTO $data): Model|User
+    public function register(RegisterUserDTO $data): void
     {
-        return User::create($data->toArray());
+        $data->password = Hash::make($data->password);
+        User::create($data->toArray());
     }
 }

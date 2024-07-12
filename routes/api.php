@@ -1,16 +1,9 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthUserController;
-use App\Http\Controllers\Auth\RegisterUserController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Todo\TodoController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 
 Route::group([
 
@@ -18,13 +11,12 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-    Route::post('login', [AuthUserController::class, 'login']);
-    Route::post('logout', [AuthUserController::class, 'logout']);
-    Route::post('refresh', [AuthUserController::class, 'refresh']);
-    Route::post('me', [AuthUserController::class, 'me']);
-    Route::post('register', [RegisterUserController::class, 'store']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
+    Route::post('refresh', [AuthController::class, 'refresh'])->middleware('jwt.auth');
+    Route::post('me', [AuthController::class, 'me'])->middleware('jwt.auth');
 });
-
 
 Route::apiResource('todos', TodoController::class)->middleware('jwt.auth');
 

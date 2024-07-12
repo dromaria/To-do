@@ -2,11 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\DTO\User\UserDTO;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
+use App\DTO\User\RegisterUserDTO;
 
 interface UserRepositoryInterface
 {
-    public function register(UserDTO $data): Model|User;
+    public function register(RegisterUserDTO $data): void;
 }

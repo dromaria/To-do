@@ -6,7 +6,7 @@ use Illuminate\Support\Fluent;
 
 /**
 * @property string $email
-* @property string $password
+* @property mixed $password
  */
 class UserDTO extends Fluent
 {

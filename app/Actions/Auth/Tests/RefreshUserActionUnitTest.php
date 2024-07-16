@@ -20,20 +20,11 @@ test('me action success', function () {
 
     $token = JWTAuth::fromUser($user);
 
-    Auth::shouldReceive('user')->andReturn($user);
-    Auth::shouldReceive('guard')->andReturnSelf();
-    Auth::shouldReceive('factory')->andReturnSelf();
-    Auth::shouldReceive('getTTl')->andReturn(60);
-
     Auth::expects('refresh')
         ->with(true)
         ->andReturn($token);
 
     $response = $this->action->execute();
 
-    expect($response)->toEqual([
-        'access_token' => $token,
-        'token_type' => 'bearer',
-        'expires_in' => Auth::factory()->getTTL() * 60
-    ]);
+    expect($response)->toEqual($token);
 });

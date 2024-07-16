@@ -2,6 +2,7 @@
 
 use App\Actions\Auth\RegisterAction;
 use App\DTO\User\RegisterUserDTO;
+use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Models\User;
 use Tests\UnitTestCase;
 use function Pest\Laravel\post;
@@ -27,6 +28,9 @@ test('POST /auth/register: 200', function () {
         'email' => $user->email,
         'password' => $user->password
     ]);
+
+    $request = Mockery::mock(RegisterUserRequest::class);
+    $request->shouldReceive('unique')->andReturnSelf();
 
     $this->action->expects('execute')
         ->with(Mockery::mustBe($modelDTO))

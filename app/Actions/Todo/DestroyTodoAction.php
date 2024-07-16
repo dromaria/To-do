@@ -14,6 +14,7 @@ class DestroyTodoAction
 
     public function execute(int $id): void
     {
+        /** @var Todo $todo */
         $todo = $this->todoRepository->show($id);
 
         if (Auth::user()->cannot('check', [Todo::class, $todo->user_id])) {

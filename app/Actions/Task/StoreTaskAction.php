@@ -15,7 +15,7 @@ class StoreTaskAction
     ) {
     }
 
-    public function execute(StoreTaskDTO $data, ShowTodoAction $showTodoAction): Task
+    public function execute(StoreTaskDTO $data, ShowTodoAction $showTodoAction): Model|Task
     {
         $showTodoAction->execute($data->todo_id);
 

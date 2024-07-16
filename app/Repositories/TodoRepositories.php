@@ -18,17 +18,17 @@ class TodoRepositories implements TodoRepositoryInterface
         return Todo::offset($offset)->limit($paginationDTO->limit)->where('user_id', $userId)->get();
     }
 
-    public function store(StoreTodoDTO $data): Todo
+    public function store(StoreTodoDTO $data): Model|Todo
     {
         return Todo::create($data->toArray());
     }
 
-    public function show(int $id): Todo
+    public function show(int $id): Model|Todo
     {
         return Todo::findOrFail($id);
     }
 
-    public function update(int $id, UpdateTodoDTO $data): Todo
+    public function update(int $id, UpdateTodoDTO $data): Model|Todo
     {
         $todo = Todo::findOrFail($id);
         $todo->update($data->toArray());

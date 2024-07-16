@@ -5,6 +5,7 @@ namespace App\Actions\Task;
 use App\Models\Task;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class ShowTaskAction
@@ -13,14 +14,14 @@ class ShowTaskAction
     {
     }
 
-    public function execute(int $id): Task
+    public function execute(int $id): Model|Task
     {
-        $todoWithUser = $this->taskRepository->findUserAndTask($id);
+        $taskWithUser = $this->taskRepository->findUserAndTask($id);
 
-        if (Auth::user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
+        if (Auth::user()->cannot('check', [Todo::class, $taskWithUser->todo->user_id])) {
             abort(403);
         }
 
-        return $todoWithUser;
+        return $taskWithUser;
     }
 }

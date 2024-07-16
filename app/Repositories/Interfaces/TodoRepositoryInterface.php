@@ -12,8 +12,8 @@ use Illuminate\Support\Collection;
 interface TodoRepositoryInterface
 {
     public function index(PaginationDTO $paginationDTO, int $userId): Collection;
-    public function store(StoreTodoDTO $data): Todo;
-    public function show(int $id): Todo;
-    public function update(int $id, UpdateTodoDTO $data): Todo;
+    public function store(StoreTodoDTO $data): Model|Todo;
+    public function show(int $id): Model|Todo;
+    public function update(int $id, UpdateTodoDTO $data): Model|Todo;
     public function destroy(int $id);
 }

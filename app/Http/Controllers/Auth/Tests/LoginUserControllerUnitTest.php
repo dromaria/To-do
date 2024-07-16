@@ -32,11 +32,7 @@ test('POST /auth/login: 200', function () {
 
     $this->action->expects('execute')
         ->with(Mockery::mustBe($modelDTO))
-        ->andReturn([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
-            ]);
+        ->andReturn($token);
 
     post(
         '/api/auth/login',

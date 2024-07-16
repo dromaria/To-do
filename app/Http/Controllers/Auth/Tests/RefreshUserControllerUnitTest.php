@@ -26,21 +26,8 @@ test('POST /auth/refresh: 200', function () {
 
     $token = JWTAuth::fromUser($user);
 
-    JWTAuth::shouldReceive('requireToken')->with($token)->andReturnSelf();
-    JWTAuth::shouldReceive('parser')->andReturnSelf();
-    JWTAuth::shouldReceive('setRequest')->andReturnSelf();
-    JWTAuth::shouldReceive('hasToken')->andReturnSelf();
-    JWTAuth::shouldReceive('parseToken')->andReturnSelf();
-    JWTAuth::shouldReceive('authenticate')->andReturnSelf();
-    JWTAuth::shouldReceive('factory')->andReturnSelf();
-    JWTAuth::shouldReceive('getTTl')->andReturn(60);
-
     $this->action->expects('execute')
-        ->andReturn([
-            'access_token' => JWTAuth::shouldReceive('refresh')->andReturnSelf(),
-            'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
-            ]);
+        ->andReturn($token);
 
     post(
         '/api/auth/refresh',

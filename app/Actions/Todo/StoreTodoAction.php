@@ -13,7 +13,7 @@ class StoreTodoAction
     {
     }
 
-    public function execute(StoreTodoDTO $data): Todo
+    public function execute(StoreTodoDTO $data): Model|Todo
     {
         return $this->todoRepository->store($data);
     }

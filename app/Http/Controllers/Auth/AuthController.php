@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Auth\AuthHelpers;
 use App\Actions\Auth\LoginAction;
 use App\Actions\Auth\LogoutAction;
 use App\Actions\Auth\MeAction;
@@ -12,6 +13,7 @@ use App\DTO\User\UserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginUserRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -33,16 +35,16 @@ class AuthController extends Controller
     {
         $data = new UserDTO(['email' => $request->getEmail(), 'password' => $request->getPassword()]);
 
-        $respondWithToken = $loginAction->execute($data);
+        $token = $loginAction->execute($data);
 
-        return response()->json($respondWithToken);
+        return response()->json(AuthHelpers::respondWithToken($token));
     }
 
     public function me(MeAction $meAction): JsonResponse
     {
         $user = $meAction->execute();
 
-        return response()->json($user);
+        return response()->json(new UserResource($user));
     }
 
     public function logout(LogoutAction $logoutAction): Response
@@ -54,8 +56,8 @@ class AuthController extends Controller
 
     public function refresh(RefreshAction $refreshAction): JsonResponse
     {
-        $respondWithToken = $refreshAction->execute();
+        $token = $refreshAction->execute();
 
-        return response()->json($respondWithToken);
+        return response()->json(AuthHelpers::respondWithToken($token));
     }
 }

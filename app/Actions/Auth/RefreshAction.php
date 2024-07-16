@@ -6,10 +6,8 @@ use Illuminate\Support\Facades\Auth;
 
 class RefreshAction
 {
-    public function execute(): array
+    public function execute(): string
     {
-        $token = Auth::refresh(true);
-
-        return AuthHelpers::respondWithToken($token);
+        return Auth::refresh(true);
     }
 }

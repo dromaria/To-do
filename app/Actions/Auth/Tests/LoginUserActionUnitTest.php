@@ -27,14 +27,7 @@ test('login action success', function () {
         ->with($dto->toArray())
         ->andReturn($token);
 
-    Auth::shouldReceive('factory')->andReturnSelf();
-    Auth::shouldReceive('getTTl')->andReturn(60);
-
     $response = $this->action->execute($dto);
 
-    expect($response)->toEqual([
-        'access_token' => $token,
-        'token_type' => 'bearer',
-        'expires_in' => Auth::factory()->getTTL() * 60
-    ]);
+    expect($response)->toEqual($token);
 });

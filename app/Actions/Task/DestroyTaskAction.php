@@ -14,9 +14,9 @@ class DestroyTaskAction
 
     public function execute(int $id): void
     {
-        $todoWithUser = $this->taskRepository->findUserAndTask($id);
+        $taskWithUser = $this->taskRepository->findUserAndTask($id);
 
-        if (Auth::user()->cannot('check', [Todo::class, $todoWithUser->getRelation('todo')->user_id])) {
+        if (Auth::user()->cannot('check', [Todo::class, $taskWithUser->todo->user_id])) {
             abort(403);
         }
 

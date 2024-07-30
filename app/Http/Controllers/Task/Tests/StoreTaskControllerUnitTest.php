@@ -2,13 +2,15 @@
 
 
 use App\Actions\Task\StoreTaskAction;
+use App\Actions\Todo\ShowTodoAction;
 use App\DTO\Task\StoreTaskDTO;
 use App\Models\Task;
+use App\Models\User;
 use Tests\UnitTestCase;
 use function Pest\Laravel\post;
 
 uses(UnitTestCase::class)
-->group('unit', 'action', 'controller', 'store');
+->group('unit', 'controller', 'task', 'store');
 
 beforeEach(function () {
     $this->action = Mockery::mock(StoreTaskAction::class);
@@ -17,8 +19,15 @@ beforeEach(function () {
 
 test('POST /todos/{id}/tasks: 200', function () {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $data = Task::factory()
         ->withID(1)
+        ->recycle($user)
         ->make(['todo_id' => fake()->randomNumber()]);
 
     $modelDTO = new StoreTaskDTO(
@@ -31,8 +40,11 @@ test('POST /todos/{id}/tasks: 200', function () {
         ]
     );
 
+    $showTodoAction = Mockery::mock(ShowTodoAction::class);
+    $this->app->instance(ShowTodoAction::class, $showTodoAction);
+
     $this->action->expects('execute')
-        ->with(Mockery::mustBe($modelDTO))
+        ->with(Mockery::mustBe($modelDTO), $showTodoAction)
         ->andReturn($data);
 
     post(
@@ -42,7 +54,8 @@ test('POST /todos/{id}/tasks: 200', function () {
         'description' => $data->description,
         'is_active' => $data->is_active,
         'estimation' => $data->estimation
-        ]
+        ],
+        ['Authorization' => 'Bearer ' . $token]
     )->assertOk()
     ->assertJson([
         'data' =>
@@ -59,10 +72,16 @@ test('POST /todos/{id}/tasks: 200', function () {
 
 test('POST /todos/{id}/tasks: 422', function (array $request) {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $this->action->expects('execute')
         ->never();
 
-    post('api/todos/1/tasks', $request)->assertStatus(422);
+    post('api/todos/1/tasks', $request, ['Authorization' => 'Bearer' . $token])->assertStatus(422);
 })->with([
     'empty data' => [
         []

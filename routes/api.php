@@ -1,17 +1,26 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Todo\TodoController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::group([
 
-Route::apiResource('todos', TodoController::class);
+    'middleware' => 'api',
+    'prefix' => 'auth'
 
-Route::controller(TaskController::class)->group(function () {
+], function ($router) {
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
+    Route::post('refresh', [AuthController::class, 'refresh'])->middleware('jwt.auth');
+    Route::post('me', [AuthController::class, 'me'])->middleware('jwt.auth');
+});
+
+Route::apiResource('todos', TodoController::class)->middleware('jwt.auth');
+
+Route::controller(TaskController::class)->middleware('jwt.auth')->group(function () {
     Route::get('todos/{id}/tasks', 'index');
     Route::post('todos/{id}/tasks', 'store');
     Route::get('todos/tasks/{id}', 'show');

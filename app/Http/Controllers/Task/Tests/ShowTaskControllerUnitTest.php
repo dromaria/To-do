@@ -2,12 +2,13 @@
 
 use App\Actions\Task\ShowTaskAction;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\UnitTestCase;
 use function Pest\Laravel\get;
 
 uses(UnitTestCase::class)
-->group('unit', 'action', 'controller', 'show');
+->group('unit', 'controller', 'task', 'show');
 
 beforeEach(function () {
     $this->action = Mockery::mock(ShowTaskAction::class);
@@ -16,8 +17,15 @@ beforeEach(function () {
 
 test('GET /todos/tasks/{id}: 200', function () {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $data = Task::factory()
         ->withID(1)
+        ->recycle($user)
         ->make(['todo_id' => fake()->randomNumber()]);
 
     $this->action->expects('execute')
@@ -25,7 +33,8 @@ test('GET /todos/tasks/{id}: 200', function () {
         ->andReturn($data);
 
     get(
-        'api/todos/tasks/' . $data->id
+        'api/todos/tasks/' . $data->id,
+        ['Authorization' => 'Bearer ' . $token]
     )->assertOk()
         ->assertJson([
             'data' =>
@@ -42,13 +51,16 @@ test('GET /todos/tasks/{id}: 200', function () {
 
 test('GET /todos/tasks/{id}: 404', function () {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $this->action->expects('execute')
         ->andThrow(ModelNotFoundException::class);
 
     get('api/todos/tasks/1', [
-        'title' => fake()->title,
-        'description' => fake()->optional()->text,
-        'is_active' => fake()->boolean,
-        'estimation' => fake()->date
+        'Authorization' => 'Bearer ' . $token
     ])->assertStatus(404);
 });

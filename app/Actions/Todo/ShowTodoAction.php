@@ -2,10 +2,10 @@
 
 namespace App\Actions\Todo;
 
-use App\DTO\Todo\UpdateTodoDTO;
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ShowTodoAction
 {
@@ -16,6 +16,13 @@ class ShowTodoAction
 
     public function execute(int $id): Model|Todo
     {
-        return $this->todoRepository->show($id);
+        /** @var Todo $todo */
+        $todo = $this->todoRepository->show($id);
+
+        if (Auth::user()->cannot('check', [Todo::class, $todo->user_id])) {
+            abort(403);
+        }
+
+        return $todo;
     }
 }

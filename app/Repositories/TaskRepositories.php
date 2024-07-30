@@ -39,4 +39,9 @@ class TaskRepositories implements TaskRepositoryInterface
         $task = Task::findOrFail($id);
         $task->delete();
     }
+
+    public function findUserAndTask(int $id): Task
+    {
+        return Task::where('id', $id)->with('todo:id,user_id')->firstOrFail();
+    }
 }

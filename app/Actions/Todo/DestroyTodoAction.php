@@ -4,10 +4,7 @@ namespace App\Actions\Todo;
 
 use App\Models\Todo;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class DestroyTodoAction
 {
@@ -17,6 +14,13 @@ class DestroyTodoAction
 
     public function execute(int $id): void
     {
+        /** @var Todo $todo */
+        $todo = $this->todoRepository->show($id);
+
+        if (Auth::user()->cannot('check', [Todo::class, $todo->user_id])) {
+            abort(403);
+        }
+
         $this->todoRepository->destroy($id);
     }
 }

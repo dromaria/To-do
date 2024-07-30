@@ -3,12 +3,13 @@
 
 use App\Actions\Task\DestroyTaskAction;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\UnitTestCase;
 use function Pest\Laravel\delete;
 
 uses(UnitTestCase::class)
-->group('unit', 'action', 'controller', 'destroy');
+->group('unit', 'controller', 'task', 'destroy');
 
 beforeEach(function () {
     $this->action = Mockery::mock(DestroyTaskAction::class);
@@ -17,8 +18,15 @@ beforeEach(function () {
 
 test('DELETE /todos/tasks/{id}: 200', function () {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $data = Task::factory()
         ->withID(1)
+        ->recycle($user)
         ->make(['todo_id' => fake()->randomNumber()]);
 
     $this->action->expects('execute')
@@ -27,19 +35,20 @@ test('DELETE /todos/tasks/{id}: 200', function () {
 
     delete(
         'api/todos/tasks/' . $data->id,
-        [
-        'title' => $data->title,
-        'description' => $data->description,
-        'is_active' => $data->is_active,
-        'estimation' => $data->estimation
-        ]
+        headers: ['Authorization' => 'Bearer ' . $token]
     )->assertOk();
 });
 
 test('DELETE /todos/tasks/{id}: 404', function () {
 
+    $user = User::factory()
+        ->withID(1)
+        ->make();
+
+    $token = JWTAuth::fromUser($user);
+
     $this->action->expects('execute')
         ->andThrow(ModelNotFoundException::class);
 
-    delete('api/todos/tasks/1')->assertStatus(404);
+    delete('api/todos/tasks/1', headers: ['Authorization' => 'Bearer ' . $token])->assertStatus(404);
 });

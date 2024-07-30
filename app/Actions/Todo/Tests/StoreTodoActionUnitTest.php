@@ -18,7 +18,7 @@ beforeEach(function () {
 test('todo action success with create', function () {
     $model = Todo::factory()
         ->withID(1)
-        ->make();
+        ->make(['user_id' => fake()->randomNumber()]);
     $dto = new StoreTodoDTO;
 
     $this->repository->expects('store')

@@ -8,11 +8,15 @@ services:
         container_name: todo_app
         depends_on:
             - db
+            - redis
         environment:
             DB_USERNAME: root
             DB_PASSWORD: root
             DB_PORT: 5432
             DB_HOST: db
+            REDIS_HOST: redis
+            REDIS_PASSWORD: null
+            REDIS_PORT: 6379
 
     nginx:
         image: nginx:latest
@@ -38,3 +42,10 @@ services:
             - ./tmp/db:/var/lib/postgresql/data
         container_name: todo_db
 
+    redis:
+        image: redis:7.4-alpine
+        restart: always
+        ports:
+            - '6379:6379'
+        volumes:
+            - ./redis/data:/redis

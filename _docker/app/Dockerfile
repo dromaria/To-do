@@ -11,6 +11,7 @@ RUN apk update && apk add \
       g++ \
       make \
       musl-dev
+RUN docker-php-ext-install pcntl
 RUN docker-php-ext-install pdo_pgsql && \
       docker-php-ext-install bcmath && \
       docker-php-ext-install gd && \

@@ -5,13 +5,19 @@ RUN apk update && apk add \
       libpng-dev \
       libzip-dev \
       zip unzip \
-      git
+      git \
+      autoconf \
+      gcc \
+      g++ \
+      make \
+      musl-dev
 RUN docker-php-ext-install pdo_pgsql && \
       docker-php-ext-install bcmath && \
       docker-php-ext-install gd && \
       docker-php-ext-install zip
+RUN pecl install redis && docker-php-ext-enable redis
 RUN apk cache clean && \
-      rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+      rm -rf /var/cache/apk/* /tmp/*  /var/tmp/* \
 
 COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 

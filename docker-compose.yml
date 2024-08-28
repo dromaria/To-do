@@ -49,3 +49,4 @@ services:
             - '6379:6379'
         volumes:
             - ./redis/data:/redis
+        container_name: redis

@@ -11,7 +11,7 @@ class EmailVerifyUserRequest extends AuthorizeRequest
     public function rules(): array
     {
         return [
-            'code' => ['required', 'int'],
+            'code' => ['required', 'digits:6'],
         ];
     }
 

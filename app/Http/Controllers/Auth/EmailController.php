@@ -2,46 +2,33 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Auth\VerifyEmailAction;
+use App\Actions\Auth\SendEmailAction;
 use App\DTO\User\VerifyUserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\EmailVerifyUserRequest;
-use App\Mail\VerifyMail;
-use App\Models\User;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
 
-    public function sendEmailCode(): void
+    public function sendEmailCode(SendEmailAction $sendEmailAction): Response
     {
-        $user = Auth::user();
-        $data = new VerifyUserDTO([
-            'userId' => $user->getAuthIdentifier(),
-            'code' => fake()->randomNumber(6),
-        ]);
+        $sendEmailAction->execute();
 
-        Cache::put('users:' . $data->userId, $data->code, 60*60);
-
-        Mail::to($user)->send(new VerifyMail($data->code));
+        return response()->noContent();
     }
 
-    public function confirmEmailCode(EmailVerifyUserRequest $request): void
+    public function verifyEmailCode(EmailVerifyUserRequest $request, VerifyEmailAction $verifyEmailAction): Response
     {
         $data = new VerifyUserDTO([
-            'userId' => Auth::user()->getAuthIdentifier(),
+            'user' => Auth::user(),
             'code' => $request->getCode(),
         ]);
 
-        $code = Cache::get('users:' . $data->userId);
+        $verifyEmailAction->execute($data);
 
-        if ($data->code == $code) {
-            $user = User::find($data->userId);
-            $user->forceFill(['email_verified_at' => now()])->save();
-        }
+        return response()->noContent();
     }
 }

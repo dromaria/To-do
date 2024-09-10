@@ -2,8 +2,9 @@
 
 namespace App\Actions\Auth;
 
-use App\DTO\User\VerifyUserDTO;
+use App\Models\User;
 use App\Repositories\Interfaces\EmailRepositoryInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class VerifyEmailAction
@@ -12,14 +13,21 @@ class VerifyEmailAction
     {
     }
 
-    public function execute(VerifyUserDTO $data): void
+    public function execute(string $code, MeAction $meAction): void
     {
-        $code = $this->repository->getCode($data);
+        /** @var User $user */
+        $user = $meAction->execute();
+
+        if ($user->email_verified_at) {
+            throw new HttpException(409, 'Email has already been verified.');
+        }
+
+        $referenceCode = $this->repository->getCode($user);
 
         if (!$code) {
             throw new NotFoundHttpException('Data not found in cache');
         }
 
-        $this->repository->verifyCode($data, $code);
+        $this->repository->verifyCode($user, $referenceCode, $code);
     }
 }

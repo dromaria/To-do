@@ -2,10 +2,9 @@
 
 namespace App\Actions\Auth;
 
-use App\DTO\User\VerifyUserDTO;
 use App\Jobs\SendEmailCode;
+use App\Models\User;
 use App\Repositories\Interfaces\EmailRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
 
 class SendEmailAction
 {
@@ -13,15 +12,13 @@ class SendEmailAction
     {
     }
 
-    public function execute(): void
+    public function execute(MeAction $meAction): void
     {
-        $data = new VerifyUserDTO([
-            'user' => Auth::user(),
-            'code' => fake()->numerify('######'),
-        ]);
+        /** @var User $user */
+        $user = $meAction->execute();
 
-        $this->repository->storeCode($data);
+        $code = $this->repository->storeCode($user);
 
-        SendEmailCode::dispatchIf(!$data->user->email_verified_at, $data);
+        SendEmailCode::dispatchIf(!$user->email_verified_at, $user, $code);
     }
 }

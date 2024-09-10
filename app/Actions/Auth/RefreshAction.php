@@ -2,12 +2,15 @@
 
 namespace App\Actions\Auth;
 
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class RefreshAction
 {
+    public function __construct(private UserRepositoryInterface $repository)
+    {
+    }
     public function execute(): string
     {
-        return Auth::refresh(true);
+        return $this->repository->refresh();
     }
 }

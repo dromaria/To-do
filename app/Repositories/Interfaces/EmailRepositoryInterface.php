@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\DTO\User\VerifyUserDTO;
+use App\Models\User;
 
 interface EmailRepositoryInterface
 {
-    public function storeCode(VerifyUserDTO $data): void;
-    public function getCode(VerifyUserDTO $data): ?int;
-    public function verifyCode(VerifyUserDTO $data, int $code): void;
+    public function storeCode(User $user): string;
+    public function getCode(User $user): ?string;
+    public function verifyCode(User $user, string $referenceCode, string $code): void;
 }

@@ -2,26 +2,35 @@
 
 namespace App\Repositories;
 
-use App\DTO\User\VerifyUserDTO;
+use App\Models\User;
 use App\Repositories\Interfaces\EmailRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\ValidationException;
 
 class EmailRepositories implements EmailRepositoryInterface
 {
-    public function storeCode(VerifyUserDTO $data): void
+    public function storeCode(User $user): string
     {
-        Cache::put('users:' . $data->user->id, $data->code, 60*60);
+        $code = fake()->numerify('######');
+        Cache::put('users:' . $user->id, $code, 60*60);
+
+        return $code;
     }
 
-    public function getCode(VerifyUserDTO $data): ?int
+    public function getCode(User $user): ?string
     {
-        return Cache::get('users:' . $data->user->id);
+        return Cache::get('users:' . $user->id);
     }
 
-    public function verifyCode(VerifyUserDTO $data, int $code): void
+    /**
+     * @throws ValidationException
+     */
+    public function verifyCode(User $user, string $referenceCode, string $code): void
     {
-        if ($data->code == $code) {
-            $data->user->forceFill(['email_verified_at' => now()])->save();
+        if ($referenceCode == $code) {
+            $user->forceFill(['email_verified_at' => now()])->save();
+        } else {
+            throw ValidationException::withMessages(['code' => 'Invalid code']);
         }
     }
 }

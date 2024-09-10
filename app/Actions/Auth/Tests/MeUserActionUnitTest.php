@@ -2,14 +2,15 @@
 
 use App\Actions\Auth\MeAction;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use Tests\UnitTestCase;
 
 uses(UnitTestCase::class)
     ->group('unit', 'action', 'user', 'me');
 
 beforeEach(function () {
-    $this->action = new MeAction();
+    $this->repository = Mockery::mock(UserRepositoryInterface::class);
+    $this->action = new MeAction($this->repository);
 });
 
 test('me action success', function () {
@@ -18,7 +19,7 @@ test('me action success', function () {
         ->withID(1)
         ->make();
 
-    Auth::expects('user')->andReturn($user);
+    $this->repository->expects('me')->andReturn($user);
 
     $response = $this->action->execute();
 

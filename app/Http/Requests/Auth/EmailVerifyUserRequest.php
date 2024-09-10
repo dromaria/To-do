@@ -15,8 +15,8 @@ class EmailVerifyUserRequest extends AuthorizeRequest
         ];
     }
 
-    public function getCode(): int
+    public function getCode(): string
     {
-        return $this->validated('code');
+        return (string)($this->validated('code'));
     }
 }

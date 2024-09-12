@@ -8,16 +8,16 @@ use App\Repositories\Interfaces\EmailRepositoryInterface;
 
 class SendEmailAction
 {
-    public function __construct(private EmailRepositoryInterface $repository)
+    public function __construct(private EmailRepositoryInterface $repository, private MeAction $meAction)
     {
     }
 
-    public function execute(MeAction $meAction): void
+    public function execute(): void
     {
         /** @var User $user */
-        $user = $meAction->execute();
+        $user = $this->meAction->execute();
 
-        $code = $this->repository->storeCode($user);
+        $code = $this->repository->storeCode($user->id);
 
         SendEmailCode::dispatchIf(!$user->email_verified_at, $user, $code);
     }

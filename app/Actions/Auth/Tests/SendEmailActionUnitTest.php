@@ -12,7 +12,8 @@ uses(UnitTestCase::class)
 
 beforeEach(function () {
     $this->repository = Mockery::mock(EmailRepositoryInterface::class);
-    $this->action = new SendEmailAction($this->repository);
+    $this->meAction = Mockery::mock(MeAction::class);
+    $this->action = new SendEmailAction($this->repository, $this->meAction);
 });
 
 test('send email action success', function () {
@@ -21,19 +22,18 @@ test('send email action success', function () {
         ->withID(1)
         ->make(['email_verified_at' => null]);
 
-    $meActionMock = Mockery::mock(MeAction::class);
-    $meActionMock->expects('execute')->andReturn($user);
+    $this->meAction->expects('execute')->andReturn($user);
 
     $code = fake()->numerify('######');
 
-    $this->repository->expects('storeCode')->andReturn($code);
+    $this->repository->expects('storeCode')->with($user->id)->andReturn($code);
 
     Mockery::mock('overload:'.SendEmailCode::class)
         ->expects('dispatchIf')
-        ->with(true, $user, $code)
+        ->with(!$user->email_verified_at, $user, $code)
         ->andReturnNull();
 
-    $response = $this->action->execute($meActionMock);
+    $response = $this->action->execute();
 
     expect($response)->toBeNull();
 });

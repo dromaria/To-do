@@ -9,7 +9,6 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserRepositories implements UserRepositoryInterface
 {
@@ -32,5 +31,10 @@ class UserRepositories implements UserRepositoryInterface
     public function refresh(): string
     {
         return Auth::refresh(true);
+    }
+
+    public function verifyEmail(User $user) : void
+    {
+        $user->forceFill(['email_verified_at' => now()])->save();
     }
 }

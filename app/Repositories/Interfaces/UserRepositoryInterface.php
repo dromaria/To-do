@@ -13,4 +13,5 @@ interface UserRepositoryInterface
     public function attempt(UserDTO $data): bool|string;
     public function me(): User|Authenticatable|null;
     public function refresh(): string;
+    public function verifyEmail(User $user): void;
 }

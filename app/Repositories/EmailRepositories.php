@@ -2,35 +2,27 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
 use App\Repositories\Interfaces\EmailRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\ValidationException;
 
 class EmailRepositories implements EmailRepositoryInterface
 {
-    public function storeCode(User $user): string
+    private const CODE_TTL = 3600;
+    public function storeCode(int $userID): string
     {
         $code = fake()->numerify('######');
-        Cache::put('users:' . $user->id, $code, 60*60);
+        Cache::put($this->generateKey($userID), $code, self::CODE_TTL);
 
         return $code;
     }
 
-    public function getCode(User $user): ?string
+    public function getCode(int $userID): ?string
     {
-        return Cache::get('users:' . $user->id);
+        return Cache::get($this->generateKey($userID));
     }
 
-    /**
-     * @throws ValidationException
-     */
-    public function verifyCode(User $user, string $referenceCode, string $code): void
+    private function generateKey(int $userID): string
     {
-        if ($referenceCode == $code) {
-            $user->forceFill(['email_verified_at' => now()])->save();
-        } else {
-            throw ValidationException::withMessages(['code' => 'Invalid code']);
-        }
+        return 'users:' . $userID;
     }
 }

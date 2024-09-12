@@ -1,6 +1,5 @@
 <?php
 
-use App\Actions\Auth\MeAction;
 use App\Actions\Auth\SendEmailAction;
 use App\Models\User;
 use Tests\UnitTestCase;
@@ -23,11 +22,7 @@ test('POST /auth/email_send: 204', function () {
 
     $token = JWTAuth::fromUser($user);
 
-    $meActionMock = Mockery::mock(MeAction::class);
-    $this->app->instance(MeAction::class, $meActionMock);
-
     $this->action->expects('execute')
-        ->with($meActionMock)
         ->andReturnNull();
 
     post(

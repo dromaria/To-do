@@ -17,6 +17,7 @@ class SendEmailCode implements ShouldQueue
 
     public function __construct(private User $user, private string $code)
     {
+        $this->onQueue('emails');
     }
 
     public function handle(): void

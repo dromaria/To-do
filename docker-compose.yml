@@ -49,4 +49,24 @@ services:
             - '6379:6379'
         volumes:
             - ./redis/data:/redis
-        container_name: redis
+        container_name: todo_redis
+
+    horizon:
+        build:
+            context: .
+            dockerfile: _docker/app/Dockerfile
+        volumes:
+            - ./:/var/www
+        container_name: todo_horizon
+        depends_on:
+            - db
+            - redis
+        environment:
+            DB_USERNAME: root
+            DB_PASSWORD: root
+            DB_PORT: 5432
+            DB_HOST: db
+            REDIS_HOST: redis
+            REDIS_PASSWORD: null
+            REDIS_PORT: 6379
+        command: php artisan horizon

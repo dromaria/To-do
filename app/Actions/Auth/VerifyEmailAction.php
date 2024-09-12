@@ -4,30 +4,42 @@ namespace App\Actions\Auth;
 
 use App\Models\User;
 use App\Repositories\Interfaces\EmailRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class VerifyEmailAction
 {
-    public function __construct(private EmailRepositoryInterface $repository)
-    {
+    public function __construct(
+        private EmailRepositoryInterface $emailRepository,
+        private UserRepositoryInterface $userRepository,
+        private MeAction $meAction
+    ) {
     }
 
-    public function execute(string $code, MeAction $meAction): void
+    /**
+     * @throws ValidationException
+     */
+    public function execute(string $code): void
     {
         /** @var User $user */
-        $user = $meAction->execute();
+        $user = $this->meAction->execute();
 
         if ($user->email_verified_at) {
             throw new HttpException(409, 'Email has already been verified.');
         }
 
-        $referenceCode = $this->repository->getCode($user);
+        $referenceCode = $this->emailRepository->getCode($user->id);
 
         if (!$code) {
             throw new NotFoundHttpException('Data not found in cache');
         }
 
-        $this->repository->verifyCode($user, $referenceCode, $code);
+        if ($referenceCode == $code) {
+            $this->userRepository->verifyEmail($user);
+        } else {
+            throw ValidationException::withMessages(['code' => 'Invalid code']);
+        }
     }
 }

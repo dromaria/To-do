@@ -1,6 +1,5 @@
 <?php
 
-use App\Actions\Auth\MeAction;
 use App\Actions\Auth\VerifyEmailAction;
 use App\Models\User;
 use Tests\UnitTestCase;
@@ -25,11 +24,8 @@ test('POST /auth/email_verify: 204', function () {
 
     $token = JWTAuth::fromUser($user);
 
-    $meActionMock = Mockery::mock(MeAction::class);
-    $this->app->instance(MeAction::class, $meActionMock);
-
     $this->action->expects('execute')
-        ->with($code, $meActionMock)
+        ->with($code)
         ->andReturnNull();
 
     post(
@@ -50,11 +46,8 @@ test('POST /auth/email_verify: 422', function (string $request) {
 
     $token = JWTAuth::fromUser($user);
 
-    $meActionMock = Mockery::mock(MeAction::class);
-    $this->app->instance(MeAction::class, $meActionMock);
-
     $this->action->expects('execute')
-        ->with($code, $meActionMock)
+        ->with($code)
         ->never();
 
     post('/api/auth/email_verify', (array)$request, ['Authorization' => 'Bearer ' . $token])

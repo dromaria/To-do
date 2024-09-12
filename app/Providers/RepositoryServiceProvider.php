@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\EmailRepositories;
+use App\Repositories\Interfaces\EmailRepositoryInterface;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
 use App\Repositories\Interfaces\TodoRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
@@ -29,11 +31,12 @@ class RepositoryServiceProvider extends ServiceProvider
             UserRepositoryInterface::class,
             UserRepositories::class
         );
+        $this->app->bind(
+            EmailRepositoryInterface::class,
+            EmailRepositories::class
+        );
     }
 
-    /**
-     * Bootstrap services.
-     */
     public function boot(): void
     {
         //

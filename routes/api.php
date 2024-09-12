@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\EmailController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Todo\TodoController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,8 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
     Route::post('refresh', [AuthController::class, 'refresh'])->middleware('jwt.auth');
     Route::post('me', [AuthController::class, 'me'])->middleware('jwt.auth');
+    Route::post('email_send', [EmailController::class, 'sendEmailCode'])->middleware('jwt.auth', 'throttle:1,1');
+    Route::post('email_verify', [EmailController::class, 'verifyEmailCode'])->middleware('jwt.auth', 'throttle:10,1');
 });
 
 Route::apiResource('todos', TodoController::class)->middleware('jwt.auth');
